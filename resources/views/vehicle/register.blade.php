@@ -4,6 +4,15 @@
 <form method="POST" action="{{ route('register.postStep2') }}" enctype="multipart/form-data">
 @csrf
 
+
+        <div>
+        <x-input-label for="driving_school_id" :value="__('Driving School ID')" />
+        <input id="driving_school_id" name="driving_school_id" type="text" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value="{{ $driving_school_id }}" readonly>
+        <x-input-error :messages="$errors->get('driving_school_id')" class="mt-2" />
+        </div>
+
+        <x-text-input id="user_id" type="hidden" name="user_id" :value="auth()->user()->id"/>
+
         <!-- Registration Number -->
         <div>
             <x-input-label for="registration_number" :value="__('Registration Number')" />

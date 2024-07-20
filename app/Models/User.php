@@ -53,7 +53,7 @@ class User extends Authenticatable
     
     public function drivingSchool()
     {
-        return $this->belongsTo(DrivingSchool::class);
+    return $this->hasOne(DrivingSchool::class);
     }
 
 }

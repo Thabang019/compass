@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DrivingSchoolController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,6 +26,7 @@ Route::post('vehicle/register', [RegistrationController::class, 'postStep2'])->n
 Route::get('instructor/register', [RegistrationController::class, 'instructor'])->name('instructor.register');
 Route::post('instructor/register', [RegistrationController::class, 'postStep3'])->name('register.postStep3');
 
+Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('drivingSchool.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');

@@ -65,7 +65,10 @@ class RegistrationController extends Controller
         $user = auth()->user();
         $drivingSchool = $user->drivingSchool;
 
-        return view('vehicle.register', ['driving_school' => $drivingSchool]);
+        // If $drivingSchool is null, handle it appropriately
+        $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
+
+        return view('vehicle.register', ['driving_school_id' => $drivingSchoolId]);
     }
 
     public function postStep2(Request $request)
@@ -74,12 +77,15 @@ class RegistrationController extends Controller
         'registration_number' => 'required|string|max:25',
         'code' => 'required|string|max:10',
         'vin_number' => 'required|string|max:25',
+        'driving_school_id' => 'required|exists:driving_schools,id',
     ]);
 
     $user = auth()->user();
     $drivingSchool = $user->drivingSchool;
 
     $vehicle = new Vehicle();
+    $vehicle->user_id = $user->id;
+    $vehicle->driving_school_id = $request->input('driving_school_id');
     $vehicle->registration_number = $request->input('registration_number');
     $vehicle->code = $request->input('code');
     $vehicle->vin_number = $request->input('vin_number');
@@ -93,7 +99,12 @@ class RegistrationController extends Controller
     
     public function instructor()
     {
-        return view('instructor.register');
+        $user = auth()->user();
+        $drivingSchool = $user->drivingSchool;
+
+        $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
+
+        return view('instructor.register', ['driving_school_id' => $drivingSchoolId]);
     }
 
     public function postStep3(Request $request)
@@ -107,13 +118,13 @@ class RegistrationController extends Controller
         $user = auth()->user();
         $instructor = new Instructor();
         $instructor->user_id = $user->id;
-        $instructor->driving_school_id = $user->drivingSchool->id;
+        $instructor->driving_school_id = $request->input('driving_school_id');
         $instructor->name = $request->input('name');
         $instructor->phone_number = $request->input('phone_number');
 
         $instructor->save();
 
-        return redirect()->route('drivingSchool.dashboard');
+        return redirect(route('drivingSchool.index'));
     }
 
 }
