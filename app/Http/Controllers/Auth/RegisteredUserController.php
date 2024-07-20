@@ -47,6 +47,16 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        if ($user->role === 'admin') 
+        {
+            return redirect(route('drivingSchool.register'));
+            
+        } elseif ($user->role === 'learner')
+        {
+            return redirect(route('dashboard'));
+        } else
+        {
+            return redirect(route('systemAdmin.dashboard'));
+        }
     }
 }

@@ -50,4 +50,10 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+    
+    public function drivingSchool()
+    {
+        return $this->belongsTo(DrivingSchool::class);
+    }
+
 }

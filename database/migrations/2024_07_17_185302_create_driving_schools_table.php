@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('driving_schools', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('image')->nullable();
             $table->string('registration_number');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('phone_number');
+            $table->string('image')->nullable();
             $table->string('location');
-            $table->string('status');
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
+            $table->string('certificate');
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

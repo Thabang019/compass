@@ -13,25 +13,45 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
-        <div>
-            <x-input-label for="name" :value="__('Driving School Registration Number')" class="text-blue-500"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        <!-- Profile Picture Section -->
+        <div class="flex items-center gap-4">
+            @if ($user->profile_photo_path)
+                <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="Profile Photo" class="w-24 h-24 rounded-full object-cover">
+            @else
+                <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span class="text-gray-500">No Photo</span>
+                </div>
+            @endif
+
+            <div>
+                <x-input-label for="profile_photo" :value="__('Profile Photo')" class="text-blue-500"/>
+                <x-text-input id="profile_photo" name="profile_photo" type="file" class="mt-1 block w-full" />
+                <x-input-error class="mt-2" :messages="$errors->get('profile_photo')" />
+            </div>
         </div>
 
+        <!-- Registration Number -->
+        <div>
+            <x-input-label for="registration_number" :value="__('Driving School Registration Number')" class="text-blue-500"/>
+            <x-text-input id="registration_number" name="registration_number" type="text" class="mt-1 block w-full" :value="old('registration_number', $user->registration_number)" required autofocus autocomplete="registration_number" />
+            <x-input-error class="mt-2" :messages="$errors->get('registration_number')" />
+        </div>
+
+        <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" class="text-blue-500"/>
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
+        <!-- Email -->
         <div>
             <x-input-label for="email" :value="__('Email')" class="text-blue-500"/>
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="email" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -53,24 +73,26 @@
             @endif
         </div>
 
+        <!-- Phone Number -->
         <div>
-            <x-input-label for="name" :value="__('Phone Number')" class="text-blue-500"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="phone" :value="__('Phone Number')" class="text-blue-500"/>
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" required autofocus autocomplete="phone" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
+        <!-- Location -->
         <div>
-            <x-input-label for="name" :value="__('Location')" class="text-blue-500"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="location" :value="__('Location')" class="text-blue-500"/>
+            <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $user->location)" required autofocus autocomplete="location" />
+            <x-input-error class="mt-2" :messages="$errors->get('location')" />
         </div>
 
+        <!-- Status -->
         <div>
-            <x-input-label for="name" :value="__('Status')" class="text-blue-500"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="status" :value="__('Status')" class="text-blue-500"/>
+            <x-text-input id="status" name="status" type="text" class="mt-1 block w-full" :value="old('status', $user->status)" required autofocus autocomplete="status" />
+            <x-input-error class="mt-2" :messages="$errors->get('status')" />
         </div>
-
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
