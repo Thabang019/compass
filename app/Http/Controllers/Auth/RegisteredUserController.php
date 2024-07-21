@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
         {
             return redirect(route('drivingSchool.register'));
             
-        } elseif ($user->role === 'learner')
+        } elseif ($user->role === 'user')
         {
             return redirect(route('dashboard'));
         } else
