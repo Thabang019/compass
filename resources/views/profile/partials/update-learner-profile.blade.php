@@ -24,9 +24,9 @@
         </div>
 
         <div>
-            <x-input-label for="name" :value="__('Drivers Lisence Number')" class="text-green-500" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="driver_license_number" :value="__('Drivers License Number')" class="text-green-500" />
+            <x-text-input id="driver_license_number" name="driver_license_number" type="text" class="mt-1 block w-full" :value="old('driver_license_number', $user->driver_license_number)" required autofocus autocomplete="driver_license_number" />
+            <x-input-error class="mt-2" :messages="$errors->get('driver_license_number')" />
         </div>
 
         <div>
@@ -54,9 +54,9 @@
         </div>
 
         <div>
-            <x-input-label for="name" :value="__('Phone Number')" class="text-green-500" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="phone_number" :value="__('Phone Number')" class="text-green-500" />
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" required autofocus autocomplete="phone_number" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
         </div>
 
         <div class="flex items-center gap-4">

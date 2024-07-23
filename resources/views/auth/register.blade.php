@@ -47,6 +47,19 @@
         </select>
         </div>
 
+        <!-- Additional Fields for Learner Driver -->
+        <div id="learnerFields" class="hidden mt-4">
+                <div class="mb-4">
+                <x-input-label for="driver_license_number" :value="__('Driver License Number')" />
+                <x-text-input id="driver_license_number" name="driver_license_number" type="text" class="mt-1 block w-full" />
+                </div>
+
+                <div class="mb-4">
+                <x-input-label for="phone_number" :value="__('Phone Number')" />
+                <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" />
+                </div>
+        </div>
+
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
@@ -58,4 +71,20 @@
             </x-primary-button>
         </div>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleSelect = document.getElementById('role');
+            const learnerFields = document.getElementById('learnerFields');
+
+            roleSelect.addEventListener('change', function () {
+                if (this.value === 'user') {
+                    learnerFields.classList.remove('hidden');
+                } else {
+                    learnerFields.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
 </x-guest-layout>

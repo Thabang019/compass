@@ -75,9 +75,9 @@
 
         <!-- Phone Number -->
         <div>
-            <x-input-label for="phone" :value="__('Phone Number')" class="text-blue-500"/>
-            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" required autofocus autocomplete="phone" />
-            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+            <x-input-label for="phone_number" :value="__('Phone Number')" class="text-blue-500"/>
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" required autofocus autocomplete="phone" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
         </div>
 
         <!-- Location -->
