@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\DrivingSchool;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -18,15 +20,20 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         
+        $drivingSchoolData = $user->role === 'admin' ? $user->drivingSchool : null;
+
         switch ($user->role) {
             case 'admin':
                 return view('profile.admin', [
                     'user' => $user,
+                    'drivingSchoolData' => $drivingSchoolData,
                 ]);
+
             case 'user':
                 return view('profile.learner', [
                     'user' => $user,
                 ]);
+
             default:
                 return view('profile.edit', [
                     'user' => $user,
@@ -38,17 +45,44 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+{
+    $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    if ($request->user()->isDirty('email')) {
+        $request->user()->email_verified_at = null;
     }
+
+    $user = $request->user();
+
+    if ($user->role === 'admin') {
+        $drivingSchool = DrivingSchool::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'registration_number' => $request->input('registration_number'),
+                'phone_number' => $request->input('phone_number'),
+                'location' => $request->input('location'),
+            ]
+        );
+
+        if ($request->hasFile('image')) {
+            if ($drivingSchool->image) {
+                Storage::delete($drivingSchool->image);
+            }
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time().'.'.$extension;
+            $filePath = 'public/'.$fileName;
+            $file->storeAs('public', $fileName);
+            $drivingSchool->image = $filePath;
+            $drivingSchool->save();
+        }
+    }
+
+    $request->user()->save();
+
+    return Redirect::route('profile.show')->with('status', 'profile-updated');
+}
 
     /**
      * Delete the user's account.

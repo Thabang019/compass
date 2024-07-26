@@ -19,8 +19,8 @@
 
         <!-- Profile Picture Section -->
         <div class="flex items-center gap-4">
-            @if ($user->profile_photo_path)
-                <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="Profile Photo" class="w-24 h-24 rounded-full object-cover">
+            @if ($drivingSchoolData->image)
+            <img src="{{ asset('storage/' . $drivingSchoolData->image) }}" alt="Profile Photo"  class="w-24 h-24 rounded-full object-cover">
             @else
                 <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
                     <span class="text-gray-500">No Photo</span>
@@ -28,16 +28,17 @@
             @endif
 
             <div>
-                <x-input-label for="profile_photo" :value="__('Profile Photo')" class="text-blue-500"/>
-                <x-text-input id="profile_photo" name="profile_photo" type="file" class="mt-1 block w-full" />
-                <x-input-error class="mt-2" :messages="$errors->get('profile_photo')" />
+                <x-input-label for="image" :value="__('Profile Photo')" class="text-blue-500"/>
+                <x-text-input id="image" name="image" type="file" class="mt-1 block w-full" />
+                <x-input-error class="mt-2" :messages="$errors->get('image')" />
             </div>
         </div>
 
+        
         <!-- Registration Number -->
         <div>
             <x-input-label for="registration_number" :value="__('Driving School Registration Number')" class="text-blue-500"/>
-            <x-text-input id="registration_number" name="registration_number" type="text" class="mt-1 block w-full" :value="old('registration_number', $user->registration_number)" required autofocus autocomplete="registration_number" />
+            <x-text-input id="registration_number" name="registration_number" type="text" class="mt-1 block w-full" :value="old('registration_number', $drivingSchoolData->registration_number)" required autofocus autocomplete="registration_number" />
             <x-input-error class="mt-2" :messages="$errors->get('registration_number')" />
         </div>
 
@@ -76,21 +77,21 @@
         <!-- Phone Number -->
         <div>
             <x-input-label for="phone_number" :value="__('Phone Number')" class="text-blue-500"/>
-            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" required autofocus autocomplete="phone" />
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $drivingSchoolData->phone_number)" required autofocus autocomplete="phone_number" />
             <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
         </div>
 
         <!-- Location -->
         <div>
             <x-input-label for="location" :value="__('Location')" class="text-blue-500"/>
-            <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $user->location)" required autofocus autocomplete="location" />
+            <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $drivingSchoolData->location)" required autofocus autocomplete="location" />
             <x-input-error class="mt-2" :messages="$errors->get('location')" />
         </div>
 
         <!-- Status -->
         <div>
             <x-input-label for="status" :value="__('Status')" class="text-blue-500"/>
-            <x-text-input id="status" name="status" type="text" class="mt-1 block w-full" :value="old('status', $user->status)" required autofocus autocomplete="status" />
+            <x-text-input id="status" name="status" type="text" class="mt-1 block w-full" :value="old('status', $drivingSchoolData->status)" autofocus autocomplete="status" />
             <x-input-error class="mt-2" :messages="$errors->get('status')" />
         </div>
 
