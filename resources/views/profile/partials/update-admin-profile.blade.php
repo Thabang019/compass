@@ -17,15 +17,14 @@
         @csrf
         @method('patch')
 
-        <!-- Profile Picture Section -->
         <div class="flex items-center gap-4">
-            @if ($drivingSchoolData->image)
-            <img src="{{ asset('storage/' . $drivingSchoolData->image) }}" alt="Profile Photo"  class="w-24 h-24 rounded-full object-cover">
-            @else
-                <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span class="text-gray-500">No Photo</span>
-                </div>
-            @endif
+        @if ($drivingSchoolData->image)
+                    <img src="{{$drivingSchoolData->image}}" alt="{{ asset($drivingSchoolData->image) }}" class="w-24 h-24 rounded-full object-cover">
+                @else
+                    <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                    <img class="h-24 w-24 mr-5 py-4" src={{ asset('compass.png') }} alt="compasss">
+                    </div>
+        @endif
 
             <div>
                 <x-input-label for="image" :value="__('Profile Photo')" class="text-blue-500"/>
