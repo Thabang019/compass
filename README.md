@@ -35,27 +35,40 @@ Dependencies:
 
 XAMPP
 XAMPP provides an easy-to-install Apache-MySQL-PHP-PhpMyAdmin environment that is suitable for running the Laravel project locally. Download and install XAMPP from the official website: XAMPP Official Website
+
 PHP Version:
 Ensure that a compatible version of PHP is installed (recommended: PHP 7.2 or higher) to run the Laravel project. In the Git Bash terminal, run the following command: php -v
+
 Composer:
 Ensure that Composer is installed to manage the project's dependencies. If Composer is not already installed, you can download it from Composer's official website.
+
 Node.js
 Ensure that Node.js and npm are installed on the local machine. You can download and install Node.js from the official website:
+
 Laravel Framework:
 The project utilizes Laravel framework. Ensure that the local environment has Laravel installed. You can install Laravel using Composer by running the following command: composer global require laravel/installer
+
 Git
 Install Git to clone the project repository and manage version control. Git can be downloaded and installed from the official Git website:
 Environment Setup:
 
+
+
+
 Clone the Project Repository:
 Clone the project repository from the current version control system (Git) to your local machine.
+
 Install Dependencies:
 Navigate to the project directory and run the following command to install the project dependencies using Composer by running the following command: composer install
+
 Migrate Database:
 Run the database migrations to create the necessary tables in the database by running the following command: php artisan migrate
+
 Install Node.js Packages:
 Navigate to the project directory using git and run the following command to install the necessary Node.js packages: npm install
+
 Run Laravel Mix:
 The project uses Laravel Mix for asset compilation (e.g., SCSS, JavaScript), run the following command to compile assets: npm run dev
+
 Start the Development Server:
 To start the development server, run the following command: php artisan serve

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\DrivingSchool;
+use App\Models\Instructor;
+use App\Models\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -14,7 +16,13 @@ class DrivingSchoolController extends Controller
      */
     public function index(): View
     {
-        return view('drivingSchool.dashboard');
+        $user = auth()->user();
+        $drivingSchool = $user->drivingSchool;
+
+        // If $drivingSchool is null, handle it appropriately
+        $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
+
+        return view('drivingSchool.dashboard', ['driving_school_id' => $drivingSchoolId]);
     }
 
     /**
@@ -69,22 +77,7 @@ class DrivingSchoolController extends Controller
             'status' => 'nullable|string|max:255',
         ]);
 
-            $user = $request->user();
-    
-            if ($request->hasFile('image')) {
-    
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $fileName = time().'.'.$extension;
-                $imagePath = 'storage/';
-                $file->move($imagePath, $fileName);
-                $validated['image'] = $imagePath.$fileName;
-            }
-            $post = $user->posts()->create($validated);
-    
-            return redirect()->route('posts.show', ['post' => $post])->with('success', 'Blog Post Successfully Posted.');
-
-        }
+    }
 
     /**
      * Display the specified resource.
@@ -117,4 +110,54 @@ class DrivingSchoolController extends Controller
     {
         //
     }
+
+
+    public function store_instructor(Request $request) : RedirectResponse
+    {
+        $user = auth()->user();
+        $drivingSchool = $user->drivingSchool;
+
+        $request->validate([
+            'driving_school_id' => 'required|exists:driving_schools,id',
+            'name' => 'required|string|max:60',
+            'phone_number' => 'required|string|max:10',
+        ]);
+
+        $instructor = new Instructor();
+        $instructor->user_id = $user->id;
+        $instructor->driving_school_id = $request->input('driving_school_id');
+        $instructor->name = $request->input('name');
+        $instructor->phone_number = $request->input('phone_number');
+
+        $instructor->save();
+
+        return redirect(route('drivingSchool.index'));
+    }
+    
+
+
+    public function store_vehicle(Request $request) : RedirectResponse
+    {
+    $user = auth()->user();
+    $drivingSchool = $user->drivingSchool;
+
+    $request->validate([
+        'registration_number' => 'required|string|max:25',
+        'code' => 'required|string|max:10',
+        'vin_number' => 'required|string|max:25',
+        'driving_school_id' => 'required|exists:driving_schools,id',
+    ]);
+
+    $vehicle = new Vehicle();
+    $vehicle->user_id = $user->id;
+    $vehicle->driving_school_id = $request->input('driving_school_id');
+    $vehicle->registration_number = $request->input('registration_number');
+    $vehicle->code = $request->input('code');
+    $vehicle->vin_number = $request->input('vin_number');
+    $vehicle->save();
+
+    return redirect()->route('drivingSchool.index');
+
+    }
+
 }

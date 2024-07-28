@@ -32,6 +32,8 @@ Route::get('instructor/register', [RegistrationController::class, 'instructor'])
 Route::post('instructor/register', [RegistrationController::class, 'postStep3'])->name('register.postStep3');
 
 Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('drivingSchool.dashboard');
+Route::post('drivingSchool', [DrivingSchoolController::class, 'store_vehicle'])->name('vehicles.store');
+Route::post('drivingSchool', [DrivingSchoolController::class, 'store_instructor'])->name('instructors.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
@@ -44,6 +46,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 });
 
+
+Route::post('/drivingSchool/store-instructor', [DrivingSchoolController::class, 'store_instructor'])
+    ->name('instructors.store')
+    ->middleware(['auth', 'verified']);
+
+Route::post('/drivingSchool/store-vehicle', [DrivingSchoolController::class, 'store_vehicle'])
+    ->name('vehicles.store')
+    ->middleware(['auth', 'verified']);
 
 Route::resource('drivingSchool', DrivingSchoolController::class)
     ->only(['index', 'store'])
