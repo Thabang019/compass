@@ -5,6 +5,7 @@ use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DrivingSchoolController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\SystemAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,9 +15,7 @@ Route::get('/search', function () {
     return view('search');
 });
 
-Route::get('systemAdmin/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('systemAdmin/dashboard', [SystemAdminController::class, 'dashboard'])->name('systemAdmin.dashboard');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

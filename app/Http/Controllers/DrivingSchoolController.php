@@ -19,7 +19,6 @@ class DrivingSchoolController extends Controller
         $user = auth()->user();
         $drivingSchool = $user->drivingSchool;
 
-        // If $drivingSchool is null, handle it appropriately
         $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
 
         return view('drivingSchool.dashboard', ['driving_school_id' => $drivingSchoolId]);
@@ -82,11 +81,19 @@ class DrivingSchoolController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DrivingSchool $drivingSchool)
+    public function show(DrivingSchool $drivingSchool) : View
     {
-        //
+        return view('drivingSchool.show', compact('drivingSchool'));
     }
 
+
+    public function updateStatus(Request $request, DrivingSchool $drivingSchool)
+    {
+        $drivingSchool->status = $request->input('status');
+        $drivingSchool->save();
+
+        return redirect()->route('drivingSchools.show', $drivingSchool)->with('status', 'Driving school status updated!');
+    }
     /**
      * Show the form for editing the specified resource.
      */
