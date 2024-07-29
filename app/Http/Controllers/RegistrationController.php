@@ -22,6 +22,7 @@ class RegistrationController extends Controller
             'registration_number' => 'required|string|max:25',
             'user_id' => 'required|exists:users,id',
             'phone_number' => 'required|string|max:10',
+            'name' => 'required|string|max:100',
             'image' => 'nullable|string|max:255',
             'location' => 'required|string|max:100',
             'latitude' => 'required|numeric',
@@ -34,6 +35,7 @@ class RegistrationController extends Controller
         $drivingSchool = new DrivingSchool();
         $drivingSchool->user_id = $user->id;
         $drivingSchool->registration_number = $request->input('registration_number');
+        $drivingSchool->name = $request->input('name');
         $drivingSchool->phone_number = $request->input('phone_number');
         $drivingSchool->location = $request->input('location');
         $drivingSchool->latitude = $request->input('latitude');

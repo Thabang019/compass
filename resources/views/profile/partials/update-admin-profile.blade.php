@@ -43,8 +43,8 @@
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" class="text-blue-500"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-input-label for="name" :value="__(' Driving School Name')" class="text-blue-500"/>
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $drivingSchoolData->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 

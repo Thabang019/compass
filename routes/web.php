@@ -32,8 +32,10 @@ Route::get('instructor/register', [RegistrationController::class, 'instructor'])
 Route::post('instructor/register', [RegistrationController::class, 'postStep3'])->name('register.postStep3');
 
 Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('drivingSchool.dashboard');
-Route::post('drivingSchool', [DrivingSchoolController::class, 'store_vehicle'])->name('vehicles.store');
-Route::post('drivingSchool', [DrivingSchoolController::class, 'store_instructor'])->name('instructors.store');
+
+
+Route::get('/driving-schools/{drivingSchool}', [DrivingSchoolController::class, 'show'])->name('drivingSchools.show');
+Route::post('/driving-schools/{drivingSchool}/update-status', [DrivingSchoolController::class, 'updateStatus'])->name('drivingSchools.updateStatus');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
