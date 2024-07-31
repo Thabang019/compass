@@ -61,24 +61,6 @@ class DrivingSchoolController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) : RedirectResponse
-    {
-        $validated = $request->validate([
-            'registration_number' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
-            'phone_number' => 'required|string|max:255',
-            'image' => 'nullable|string|max:255',
-            'location' => 'required|string|max:255',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'status' => 'nullable|string|max:255',
-        ]);
-
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(DrivingSchool $drivingSchool) : View
@@ -138,7 +120,7 @@ class DrivingSchoolController extends Controller
 
         $instructor->save();
 
-        return redirect(route('drivingSchool.index'));
+        return redirect()->route('drivingSchool.index')->with('status', 'Instructor Added!');
     }
     
 
@@ -163,7 +145,7 @@ class DrivingSchoolController extends Controller
     $vehicle->vin_number = $request->input('vin_number');
     $vehicle->save();
 
-    return redirect()->route('drivingSchool.index');
+    return redirect()->route('drivingSchool.index')->with('status', 'Vehicle Added!');
 
     }
 

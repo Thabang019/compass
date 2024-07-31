@@ -23,7 +23,7 @@ class RegistrationController extends Controller
             'user_id' => 'required|exists:users,id',
             'phone_number' => 'required|string|max:10',
             'name' => 'required|string|max:100',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image',
             'location' => 'required|string|max:100',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -41,16 +41,17 @@ class RegistrationController extends Controller
         $drivingSchool->latitude = $request->input('latitude');
         $drivingSchool->longitude = $request->input('longitude');
 
-        $certificatePath = $request->file('certificate')->store('uploads/documents');
+        $certificatePath = $request->file('certificate')->store('public');
 
         if ($request->hasFile('image')) {
 
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time().'.'.$extension;
-            $imagePath = 'storage/';
-            $file->move($imagePath, $fileName);
-            $validated['image'] = $imagePath.$fileName;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $imagePath = 'storage/';
+                $file->storeAs('public/', $fileName);
+                $drivingSchool->image = $imagePath . $fileName;
+            }
         }
 
         $drivingSchool->certificate = $certificatePath;

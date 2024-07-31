@@ -16,7 +16,7 @@
             <p class="text-lg mb-2"><span class="font-semibold">Longitude:</span> {{ $drivingSchool->longitude }}</p>
             <p class="text-lg mb-2"><span class="font-semibold">Certificate:</span> {{ $drivingSchool->certificate }}</p>
             <p class="text-lg mb-2"><span class="font-semibold">Status:</span> {{ ucfirst($drivingSchool->status) }}</p>
-            <iframe src="{{ asset($drivingSchool->certificate) }}" class="w-full h-screen"></iframe>
+            <iframe src="{{ "/storage/../" . $drivingSchool->certificate }}" class="w-full h-screen"></iframe>
 
             <form action="{{ route('drivingSchools.updateStatus', $drivingSchool) }}" method="POST" class="mt-6 flex space-x-4">
                 @csrf
