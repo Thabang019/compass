@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('registration_number');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('name');
+            $table->string('school_name');
             $table->string('phone_number');
             $table->string('image')->nullable();
             $table->string('location');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
             $table->string('certificate');
-            $table->string('status')->nullable();
+            $table->string('status')->nullable()->default('pending');
             $table->timestamps();
         });
     }

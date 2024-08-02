@@ -43,9 +43,9 @@
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__(' Driving School Name')" class="text-blue-500"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $drivingSchoolData->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="school_name" :value="__(' Driving School Name')" class="text-blue-500"/>
+            <x-text-input id="school_name" name="school_name" type="text" class="mt-1 block w-full" :value="old('school_name', $drivingSchoolData->school_name)" required autofocus autocomplete="school_name" />
+            <x-input-error class="mt-2" :messages="$errors->get('school_name')" />
         </div>
 
         <!-- Email -->

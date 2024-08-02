@@ -61,7 +61,7 @@ class ProfileController extends Controller
             $drivingSchool = DrivingSchool::firstOrNew(['user_id' => $user->id]);
             $drivingSchool->fill([
                 'registration_number' => $request->input('registration_number'),
-                'name' => $request->input('name'),
+                'school_name' => $request->input('school_name'),
                 'phone_number' => $request->input('phone_number'),
                 'location' => $request->input('location'),
             ]);

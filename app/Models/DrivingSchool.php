@@ -12,7 +12,7 @@ class DrivingSchool extends Model
     protected $fillable = [
         'registration_number',
         'user_id',
-        'name',
+        'school_name',
         'phone_number',
         'image',
         'location',
