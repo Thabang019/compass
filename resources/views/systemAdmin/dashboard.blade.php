@@ -31,7 +31,8 @@
         @foreach ($drivingSchools as $drivingSchool)
             <div class="bg-white border border-gray-200 rounded-lg shadow-md mb-4">
                 <div class="p-4">
-                    <h5 class="text-lg font-semibold text-gray-800">{{ $drivingSchool->location }}</h5>
+                    <h5 class="text-lg font-semibold text-gray-800">{{ $drivingSchool->school_name }}</h5>
+                    <p class="text-gray-600">{{ $drivingSchool->location }}</p>
                     <p class="text-gray-600">{{ $drivingSchool->phone_number }}</p>
                     <p class="text-gray-500">Registered by: {{ $drivingSchool->user->name }}</p>
                     <a href="{{ route('drivingSchools.show', $drivingSchool) }}" class="mt-2 inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">View Details</a>
@@ -48,10 +49,11 @@
         @foreach ($allDrivingSchools as $drivingSchool)
         <div class="bg-white border border-gray-200 rounded-lg shadow-md mb-4">
                 <div class="p-4">
-                    <h5 class="text-lg font-semibold text-gray-800">{{ $drivingSchool->location }}</h5>
+                    <h5 class="text-lg font-semibold text-gray-800">{{ $drivingSchool->school_name }}</h5>
+                    <p class="text-gray-600">{{ $drivingSchool->location }}</p>
                     <p class="text-gray-600">{{ $drivingSchool->phone_number }}</p>
                     <p class="text-gray-500">Registered by: {{ $drivingSchool->user->name }}</p>
-                    <a href="{{ route('drivingSchools.show', $drivingSchool) }}" class="mt-2 inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">View Details</a>
+                    <a href="{{ route('drivingSchools.show', $drivingSchool) }}" class="mt-2 inline-block bg-blue-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">View Details</a>
                 </div>
             </div>
         @endforeach

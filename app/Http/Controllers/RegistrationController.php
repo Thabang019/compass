@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Instructor;
 use App\Models\Vehicle;
 use App\Models\DrivingSchool;
+use Illuminate\Support\Facades\Storage;
 
 class RegistrationController extends Controller
 {
@@ -41,7 +42,12 @@ class RegistrationController extends Controller
         $drivingSchool->latitude = $request->input('latitude');
         $drivingSchool->longitude = $request->input('longitude');
 
-        $certificatePath = $request->file('certificate')->store('public');
+        if ($request->hasFile('certificate')) {
+            $certificateFile = $request->file('certificate');
+            $certificateFileName = time() . '_certificate.' . $certificateFile->getClientOriginalExtension();
+            $certificateFilePath = $certificateFile->storePubliclyAs('public', $certificateFileName);
+            $drivingSchool->certificate = Storage::url($certificateFilePath);
+        }
 
         if ($request->hasFile('image')) {
 
@@ -53,9 +59,7 @@ class RegistrationController extends Controller
                 $drivingSchool->image = $imagePath . $fileName;
             }
         }
-
-        $drivingSchool->certificate = $certificatePath;
-            
+                    
         $drivingSchool->save();
 
         return redirect()->route('vehicle.register');
