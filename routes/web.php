@@ -36,6 +36,8 @@ Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('dr
 Route::get('/driving-schools/{drivingSchool}', [DrivingSchoolController::class, 'show'])->name('drivingSchools.show');
 Route::post('/driving-schools/{drivingSchool}/update-status', [DrivingSchoolController::class, 'updateStatus'])->name('drivingSchools.updateStatus');
 
+Route::get('/profile/{id}', [ProfileController::class, 'displayDrivingSchoolProfile'])->name('profile.displayDrivingSchoolProfile');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

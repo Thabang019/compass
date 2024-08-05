@@ -42,10 +42,28 @@ class ProfileController extends Controller
     }
 
     /**
+     * Update the profile information by root user
+     */
+    public function displayDrivingSchoolProfile(Request $request, $id)
+    {   
+    $user = Auth::user();
+
+    $drivingSchoolData = DrivingSchool::where('id', $id)->firstOrFail();
+
+    switch ($user->role) {
+        case 'root':
+            return view('profile.admin', [
+                'drivingSchoolData' => $drivingSchoolData,
+                'userEmail' => $drivingSchoolData->user->email,
+            ]);
+        }
+    }
+
+    /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-{
+    {
     $user = $request->user();
 
     $user->fill($request->validated());
@@ -74,12 +92,14 @@ class ProfileController extends Controller
                 $drivingSchool->image = $imagePath . $fileName;
             }
             
-            $drivingSchool->save(); 
+                $drivingSchool->save();
+
+            }
         }
-    }
     
-    return redirect()->route('profile.show')->with('status', 'profile-updated');
-}
+        return redirect()->route('profile.show')->with('status', 'profile-updated');
+    }
+
     /**
      * Delete the user's account.
      */

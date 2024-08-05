@@ -19,10 +19,10 @@
 
         <div class="flex items-center gap-4">
         @if ($drivingSchoolData->image)
-                    <img src="{{$drivingSchoolData->image}}" alt="{{ asset($drivingSchoolData->image) }}" class="w-24 h-24 rounded-full object-cover">
+                    <img src="{{asset($drivingSchoolData->image)}}" alt="{{ asset($drivingSchoolData->image) }}" class="w-24 h-24 rounded-full object-cover">
                 @else
                     <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-                    <img class="h-24 w-24 mr-5 py-4" src={{ asset('compass.png') }} alt="compasss">
+                    <img class="h-24 w-24 mr-5 py-4" src={{ asset('compass.png') }} alt="compasss"  class="w-24 h-24 rounded-full object-cover">
                     </div>
         @endif
 
@@ -49,11 +49,17 @@
         </div>
 
         <!-- Email -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" class="text-blue-500"/>
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="email" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <div>
+                <x-input-label for="email" :value="__('Email')" class="text-blue-500"/>
+                @if(Auth::user()->role === 'root')
+                    <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="$userEmail" disabled />
+                @else
+                    <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="email" />
+                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                @endif
+            </div>
 
+            @if(Auth::user()->role === 'admin' || Auth::user()->role === 'user')
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
                     <p class="text-sm mt-2 text-gray-800">
@@ -72,6 +78,7 @@
                 </div>
             @endif
         </div>
+        @endif
 
         <!-- Phone Number -->
         <div>
@@ -90,7 +97,7 @@
         <!-- Status -->
         <div>
             <x-input-label for="status" :value="__('Status')" class="text-blue-500"/>
-            <x-text-input id="status" name="status" type="text" class="mt-1 block w-full" :value="old('status', $drivingSchoolData->status)" autofocus autocomplete="status" />
+            <x-text-input id="status" name="status" type="text" class="mt-1 block w-full" :value="old('status', $drivingSchoolData->status)" disabled/>
             <x-input-error class="mt-2" :messages="$errors->get('status')" />
         </div>
 
