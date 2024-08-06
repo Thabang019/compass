@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('driving_school_id')->constrained()->cascadeOnDelete();
             $table->string('registration_number');
             $table->string('code');
-            $table->string('vin_number');
+            $table->string('vin_number')->unique();
             $table->string('status')->nullable();
             $table->timestamps();
         });

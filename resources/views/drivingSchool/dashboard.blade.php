@@ -14,6 +14,20 @@
             </script>
         @endif
 
+        @if (session('error'))
+        <div id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {{ session('error') }}
+        </div>
+            <script>
+                setTimeout(function(){
+                    var errorMessage = document.getElementById('errorMessage');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }, 5000); // Hide the error message after 5 seconds (5000 milliseconds)
+            </script>
+        @endif
+
         <!-- Pill Tabs -->
         <div class="mb-6">
         <nav class="flex space-x-10">

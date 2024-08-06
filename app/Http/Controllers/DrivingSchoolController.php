@@ -8,6 +8,7 @@ use App\Models\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Validator;
 
 class DrivingSchoolController extends Controller
 {
@@ -106,11 +107,18 @@ class DrivingSchoolController extends Controller
         $user = auth()->user();
         $drivingSchool = $user->drivingSchool;
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'driving_school_id' => 'required|exists:driving_schools,id',
             'name' => 'required|string|max:60',
-            'phone_number' => 'required|string|max:10',
+            'phone_number' => 'required|string|max:10|unique:instructors,phone_number',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Validation failed. Please check your input.');
+        }
 
         $instructor = new Instructor();
         $instructor->user_id = $user->id;
@@ -130,12 +138,19 @@ class DrivingSchoolController extends Controller
     $user = auth()->user();
     $drivingSchool = $user->drivingSchool;
 
-    $request->validate([
+    $validator = Validator::make($request->all(), [
         'registration_number' => 'required|string|max:25',
         'code' => 'required|string|max:10',
-        'vin_number' => 'required|string|max:25',
+        'vin_number' => 'required|string|max:25|unique:vehicles,vin_number',
         'driving_school_id' => 'required|exists:driving_schools,id',
     ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput()
+            ->with('error', 'Validation failed. Please check your input.');
+    }
 
     $vehicle = new Vehicle();
     $vehicle->user_id = $user->id;

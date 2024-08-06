@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('driving_schools', function (Blueprint $table) {
             $table->id();
-            $table->string('registration_number');
+            $table->string('registration_number')->unique();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('school_name');
             $table->string('phone_number');
