@@ -31,6 +31,7 @@ Route::get('instructor/register', [RegistrationController::class, 'instructor'])
 Route::post('instructor/register', [RegistrationController::class, 'postStep3'])->name('register.postStep3');
 
 Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('drivingSchool.dashboard');
+Route::get('/driving-school/{instructor}/edit', [DrivingSchoolController::class, 'edit'])->name('drivingSchool.edit');
 
 
 Route::get('/driving-schools/{drivingSchool}', [DrivingSchoolController::class, 'show'])->name('drivingSchools.show');
@@ -59,7 +60,7 @@ Route::post('/drivingSchool/store-vehicle', [DrivingSchoolController::class, 'st
     ->middleware(['auth', 'verified']);
 
 Route::resource('drivingSchool', DrivingSchoolController::class)
-    ->only(['index', 'store'])
+    ->only(['index', 'store', 'edit'])
     ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

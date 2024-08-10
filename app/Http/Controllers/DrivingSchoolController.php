@@ -22,7 +22,12 @@ class DrivingSchoolController extends Controller
 
         $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
 
-        return view('drivingSchool.dashboard', ['driving_school_id' => $drivingSchoolId]);
+        $drivingSchool = $drivingSchool ? $drivingSchool->load(['instructors', 'vehicles']) : null;
+
+        return view('drivingSchool.dashboard', [
+            'driving_school' => $drivingSchool,
+            'driving_school_id' => $drivingSchoolId,
+        ]);
     }
 
     /**
@@ -131,8 +136,6 @@ class DrivingSchoolController extends Controller
         return redirect()->route('drivingSchool.index')->with('status', 'Instructor Added!');
     }
     
-
-
     public function store_vehicle(Request $request) : RedirectResponse
     {
     $user = auth()->user();
@@ -163,5 +166,4 @@ class DrivingSchoolController extends Controller
     return redirect()->route('drivingSchool.index')->with('status', 'Vehicle Added!');
 
     }
-
 }

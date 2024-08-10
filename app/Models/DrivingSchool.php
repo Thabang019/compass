@@ -32,6 +32,6 @@ class DrivingSchool extends Model
 
     public function instructors()
     {
-        return $this->hasMany(Vehicle::class);
+        return $this->hasMany(Instructor::class);
     }
 }
