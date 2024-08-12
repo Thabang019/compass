@@ -18,10 +18,6 @@ Route::get('systemAdmin/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get('drivingSchool/register', [RegistrationController::class, 'drivingSchool'])->name('drivingSchool.register');
 Route::post('drivingSchool/register', [RegistrationController::class, 'postStep1'])->name('register.postStep1');
 
