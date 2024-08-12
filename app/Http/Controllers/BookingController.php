@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Lesson;
 use App\Models\Instructor;
-use Illuminate\View\View;
+use App\Models\DrivingSchool;
 use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
@@ -23,6 +23,11 @@ class BookingController extends Controller
         return view('bookings.calendar', compact('bookings'));
     }
 
+    public function create(DrivingSchool $school)
+    {
+        return view('book.create', compact('school'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -34,7 +39,7 @@ class BookingController extends Controller
 
         $lesson = Lesson::create([
             'title' => $request->title,
-            'description' => 'N/A', // You can add a field for description if needed
+            'description' => 'N/A', // Add a field for description if needed
             'duration' => '1:00:00' // Default duration
         ]);
 
@@ -42,10 +47,10 @@ class BookingController extends Controller
             'user_id' => Auth::id(),
             'lesson_id' => $lesson->id,
             'instructor_id' => $request->instructor_id,
-            'date' => $request->start,
-            'time' => $request->start,
+            'date' => $request->start->format('Y-m-d'),
+            'time' => $request->start->format('H:i:s'),
         ]);
 
-        return response()->json(['success' => true]);
+        return redirect()->route('dashboard')->with('success', 'Booking created successfully!');
     }
 }

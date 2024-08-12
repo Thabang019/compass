@@ -65,7 +65,7 @@ class RegisteredUserController extends Controller
             return redirect(route('dashboard'));
         } else
         {
-            return redirect(route('systemAdmin.dashboard'));
+            return redirect()->route('systemAdmin.dashboard');
         }
     }
 }

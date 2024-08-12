@@ -12,6 +12,11 @@ class AppLayout extends Component
      */
     public function render(): View
     {
-        return view('layouts.app');
+        $user = auth()->user();
+        $drivingSchool = $user->drivingSchool;
+
+        $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
+
+        return view('layouts.app', ['driving_school_id' => $drivingSchoolId]);
     }
 }

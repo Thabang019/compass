@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Instructor;
 use App\Models\Vehicle;
 use App\Models\DrivingSchool;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class RegistrationController extends Controller
 {
@@ -18,11 +20,12 @@ class RegistrationController extends Controller
 
     public function postStep1(Request $request)
     {
-        $request->validate([
-            'registration_number' => 'required|string|max:25',
+        $validator = Validator::make($request->all(), [
+            'registration_number' => 'required|string|max:25|unique:driving_schools,registration_number',
             'user_id' => 'required|exists:users,id',
             'phone_number' => 'required|string|max:10',
-            'image' => 'nullable|string|max:255',
+            'school_name' => 'required|string|max:100',
+            'image' => 'nullable|image',
             'location' => 'required|string|max:100',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -30,29 +33,41 @@ class RegistrationController extends Controller
             'certificate' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Validation failed. Please check your input.');
+        }
+
         $user = auth()->user();
         $drivingSchool = new DrivingSchool();
         $drivingSchool->user_id = $user->id;
         $drivingSchool->registration_number = $request->input('registration_number');
+        $drivingSchool->school_name = $request->input('school_name');
         $drivingSchool->phone_number = $request->input('phone_number');
         $drivingSchool->location = $request->input('location');
         $drivingSchool->latitude = $request->input('latitude');
         $drivingSchool->longitude = $request->input('longitude');
 
-        $certificatePath = $request->file('certificate')->store('uploads/documents');
+        if ($request->hasFile('certificate')) {
+            $certificateFile = $request->file('certificate');
+            $certificateFileName = time() . '_certificate.' . $certificateFile->getClientOriginalExtension();
+            $certificateFilePath = $certificateFile->storePubliclyAs('public', $certificateFileName);
+            $drivingSchool->certificate = Storage::url($certificateFilePath);
+        }
 
         if ($request->hasFile('image')) {
 
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time().'.'.$extension;
-            $imagePath = 'storage/';
-            $file->move($imagePath, $fileName);
-            $validated['image'] = $imagePath.$fileName;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $imagePath = 'storage/';
+                $file->storeAs('public/', $fileName);
+                $drivingSchool->image = $imagePath . $fileName;
+            }
         }
-
-        $drivingSchool->certificate = $certificatePath;
-            
+                    
         $drivingSchool->save();
 
         return redirect()->route('vehicle.register');
@@ -73,12 +88,19 @@ class RegistrationController extends Controller
 
     public function postStep2(Request $request)
     {
-    $request->validate([
+        $validator = Validator::make($request->all(), [
         'registration_number' => 'required|string|max:25',
         'code' => 'required|string|max:10',
-        'vin_number' => 'required|string|max:25',
+        'vin_number' => 'required|string|max:25|unique:vehicles,vin_number',
         'driving_school_id' => 'required|exists:driving_schools,id',
     ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput()
+            ->with('error', 'Validation failed. Please check your input.');
+    }
 
     $user = auth()->user();
     $drivingSchool = $user->drivingSchool;
@@ -109,11 +131,18 @@ class RegistrationController extends Controller
 
     public function postStep3(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'driving_school_id' => 'required|exists:driving_schools,id',
             'name' => 'required|string|max:60',
-            'phone_number' => 'required|string|max:10',
+            'phone_number' => 'required|string|max:10|unique:instructors,phone_number',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Validation failed. Please check your input.');
+        }
 
         $user = auth()->user();
         $instructor = new Instructor();

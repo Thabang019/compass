@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class DrivingSchool extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'registration_number',
         'user_id',

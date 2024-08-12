@@ -1,3 +1,4 @@
+
 <x-guest-layout>
     <form method="POST" action="{{ route('register.postStep1') }}" enctype="multipart/form-data">
         @csrf
@@ -7,6 +8,13 @@
             <x-input-label for="registration_number" :value="__('Registration Number *')" />
             <x-text-input id="registration_number" class="block mt-1 w-full" type="text" name="registration_number" :value="old('registration_number')" required autofocus autocomplete="registration_number" />
             <x-input-error :messages="$errors->get('registration_number')" class="mt-2" />
+        </div>
+
+         <!-- Name -->
+         <div class="mt-4">
+            <x-input-label for="school_name" :value="__(' Driving School Name')" />
+            <x-text-input id="school_name" name="school_name" type="text" class="mt-1 block w-full" :value="old('school_name')" required autofocus autocomplete="school_name" />
+            <x-input-error class="mt-2" :messages="$errors->get('school_name')" />
         </div>
 
         <x-text-input id="user_id" type="hidden" name="user_id" :value="auth()->user()->id"/>

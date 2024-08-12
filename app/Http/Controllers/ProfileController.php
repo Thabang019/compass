@@ -14,24 +14,11 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function showProfile(Request $request)
+    public function edit(Request $request): View
     {
-        $user = Auth::user();
-        
-        switch ($user->role) {
-            case 'admin':
-                return view('profile.admin', [
-                    'user' => $user,
-                ]);
-            case 'user':
-                return view('profile.learner', [
-                    'user' => $user,
-                ]);
-            default:
-                return view('profile.edit', [
-                    'user' => $user,
-                ]);
-        }
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
     }
 
     /**

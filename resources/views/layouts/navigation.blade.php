@@ -32,14 +32,8 @@
                                     </x-slot>
 
                                     <x-slot name="content">
-                                        <x-dropdown-link :href="route('profile.show')">
-                                            {{ __('Add Instructor') }}
-                                        </x-dropdown-link>
-
-                                        <x-dropdown-link :href="route('profile.show')">
-                                            {{ __('Add Vehicle') }}
-                                        </x-dropdown-link>
-                                       
+                                        <a href="javascript:void(0)" onclick="openModal('addInstructorModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Add Instructor') }}</a>
+                                        <a href="javascript:void(0)" onclick="openModal('addVehicleModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Add Vehicle') }}</a>
                                     </x-slot>
                                 </x-dropdown>
                             </div>
