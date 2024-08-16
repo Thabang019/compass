@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('driving_school_id')->constrained()->cascadeOnDelete();
             $table->string('name');
-            $table->string('phone_number');
+            $table->string('phone_number')->unique();
             $table->string('status')->nullable();
             $table->timestamps();
         });

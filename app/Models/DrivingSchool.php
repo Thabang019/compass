@@ -11,6 +11,7 @@ class DrivingSchool extends Model
     protected $fillable = [
         'registration_number',
         'user_id',
+        'school_name',
         'phone_number',
         'image',
         'location',
@@ -30,6 +31,6 @@ class DrivingSchool extends Model
 
     public function instructors()
     {
-        return $this->hasMany(Vehicle::class);
+        return $this->hasMany(Instructor::class);
     }
 }

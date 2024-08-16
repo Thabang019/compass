@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\DrivingSchool;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -16,9 +18,46 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = Auth::user();
+        
+        $drivingSchoolData = $user->role === 'admin' ? $user->drivingSchool : null;
+
+        switch ($user->role) {
+            case 'admin':
+                return view('profile.admin', [
+                    'user' => $user,
+                    'drivingSchoolData' => $drivingSchoolData,
+                ]);
+
+            case 'user':
+                return view('profile.learner', [
+                    'user' => $user,
+                ]);
+
+            default:
+                return view('profile.edit', [
+                    'user' => $user,
+                ]);
+        }
+
+    }
+
+    /**
+     * Update the profile information by root user
+     */
+    public function displayDrivingSchoolProfile(Request $request, $id)
+    {   
+    $user = Auth::user();
+
+    $drivingSchoolData = DrivingSchool::where('id', $id)->firstOrFail();
+
+    switch ($user->role) {
+        case 'root':
+            return view('profile.admin', [
+                'drivingSchoolData' => $drivingSchoolData,
+                'userEmail' => $drivingSchoolData->user->email,
+            ]);
+        }
     }
 
     /**
@@ -26,15 +65,40 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+    $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+    $user->fill($request->validated());
+
+    if ($user->isDirty('email')) {
+        $user->email_verified_at = null;
+    }
+
+    if ($user->isDirty() || $request->hasFile('image')) {
+        $user->save(); // Save the user only if there are changes or a new image is uploaded
+        
+        if ($user->role === 'admin') {
+            $drivingSchool = DrivingSchool::firstOrNew(['user_id' => $user->id]);
+            $drivingSchool->fill([
+                'registration_number' => $request->input('registration_number'),
+                'school_name' => $request->input('school_name'),
+                'phone_number' => $request->input('phone_number'),
+                'location' => $request->input('location'),
+            ]);
+
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $imagePath = 'storage/';
+                $file->storeAs('public/', $fileName);
+                $drivingSchool->image = $imagePath . $fileName;
+            }
+            
+                $drivingSchool->save();
+
+            }
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    
+        return redirect()->route('profile.show')->with('status', 'profile-updated');
     }
 
     /**

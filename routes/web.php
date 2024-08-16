@@ -4,35 +4,42 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\LearnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DrivingSchoolController;
-use Illuminate\Support\Facades\Route;
-use App\Models\DrivingSchool;
-
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\SystemAdminController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+});
+
+Route::get('/search', function () {
+    return view('search');
+});
+
+Route::get('systemAdmin/dashboard', [SystemAdminController::class, 'dashboard'])->name('systemAdmin.dashboard');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('drivingSchool/register', [RegistrationController::class, 'drivingSchool'])->name('drivingSchool.register');
+Route::post('drivingSchool/register', [RegistrationController::class, 'postStep1'])->name('register.postStep1');
+
+Route::get('vehicle/register', [RegistrationController::class, 'vehicle'])->name('vehicle.register');
+Route::post('vehicle/register', [RegistrationController::class, 'postStep2'])->name('register.postStep2');
+
+Route::get('instructor/register', [RegistrationController::class, 'instructor'])->name('instructor.register');
+Route::post('instructor/register', [RegistrationController::class, 'postStep3'])->name('register.postStep3');
+
+Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('drivingSchool.dashboard');
+Route::get('/driving-school/{instructor}/edit', [DrivingSchoolController::class, 'edit'])->name('drivingSchool.edit');
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
-   
-    Route::get('/dashboard', [DrivingSchoolController::class, 'index'])->name('dashboard');
+Route::get('/driving-schools/{drivingSchool}', [DrivingSchoolController::class, 'show'])->name('drivingSchools.show');
+Route::post('/driving-schools/{drivingSchool}/update-status', [DrivingSchoolController::class, 'updateStatus'])->name('drivingSchools.updateStatus');
 
-   
-    Route::get('/search', [DrivingSchoolController::class, 'search'])->name('search');
-    Route::post('/search', [DrivingSchoolController::class, 'search']);
-    Route::get('/driving-schools/search', [DrivingSchoolController::class, 'search'])->name('driving_schools.search');
-   
-    Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('drivingSchool.dashboard');
+Route::get('/profile/{id}', [ProfileController::class, 'displayDrivingSchoolProfile'])->name('profile.displayDrivingSchoolProfile');
 
-    
-    Route::get('drivingSchool/register', [RegistrationController::class, 'drivingSchool'])->name('drivingSchool.register');
-    Route::post('drivingSchool/register', [RegistrationController::class, 'postStep1'])->name('register.postStep1');
-    Route::get('vehicle/register', [RegistrationController::class, 'vehicle'])->name('vehicle.register');
-    Route::post('vehicle/register', [RegistrationController::class, 'postStep2'])->name('register.postStep2');
-    Route::get('instructor/register', [RegistrationController::class, 'instructor'])->name('instructor.register');
-    Route::post('instructor/register', [RegistrationController::class, 'postStep3'])->name('register.postStep3');
-
-    
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -50,7 +57,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::get('systemAdmin/dashboard', [SystemAdminController::class, 'dashboard'])->name('systemAdmin.dashboard');
+Route::post('/drivingSchool/store-instructor', [DrivingSchoolController::class, 'store_instructor'])
+    ->name('instructors.store')
+    ->middleware(['auth', 'verified']);
+
+Route::post('/drivingSchool/store-vehicle', [DrivingSchoolController::class, 'store_vehicle'])
+    ->name('vehicles.store')
+    ->middleware(['auth', 'verified']);
+
+Route::resource('drivingSchool', DrivingSchoolController::class)
+    ->only(['index', 'store', 'edit'])
+    ->middleware(['auth', 'verified']);
 
 // Include Authentication Routes
 require __DIR__.'/auth.php';
