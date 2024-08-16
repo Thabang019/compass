@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold mb-6">Driving Schools</h1>
     
@@ -23,7 +21,7 @@
         @endforeach
     </div>
 </div>
-@endsection
+</x-app-layout>
 
 
 

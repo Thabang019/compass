@@ -4,7 +4,6 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\LearnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DrivingSchoolController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\SystemAdminController;
 
 Route::get('/', function () {
@@ -41,7 +40,6 @@ Route::get('/profile/{id}', [ProfileController::class, 'displayDrivingSchoolProf
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
