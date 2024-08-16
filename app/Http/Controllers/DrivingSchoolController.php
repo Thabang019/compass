@@ -86,53 +86,9 @@ class DrivingSchoolController extends Controller
         return redirect()->route('dashboard')->with('success', 'Driving School Successfully Created.');
     }
 
-    // Display the details of a specific driving school
-    public function show(DrivingSchool $drivingSchool): View
-    {
-        return view('drivingSchool.show', compact('drivingSchool'));
-    }
-
-    // Show the form for editing an existing driving school
-    public function edit(DrivingSchool $drivingSchool): View
-    {
-        return view('drivingSchool.edit', compact('drivingSchool'));
-    }
-
-    // Update an existing driving school's details
-    public function update(Request $request, DrivingSchool $drivingSchool): RedirectResponse
-    {
-        // Validate the updated data
-        $validated = $request->validate([
-            'registration_number' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'status' => 'nullable|string|max:255',
-        ]);
-
-        // Handle image upload if provided
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $imagePath = 'storage/images/';
-            $file->move(public_path($imagePath), $fileName);
-            $validated['image'] = $imagePath . $fileName;
-        }
-
-        // Update the driving school record in the database
-        $drivingSchool->update($validated);
-
-        // Redirect to the dashboard with a success message
-        return redirect()->route('dashboard')->with('success', 'Driving School Successfully Updated.');
-    }
-
-    // Delete a driving school from the database
-    public function destroy(DrivingSchool $drivingSchool): RedirectResponse
-    {
-        $drivingSchool->delete();
-
-        // Redirect to the dashboard with a success message
-        return redirect()->route('dashboard')->with('success', 'Driving School Successfully Deleted.');
-    }
 }
+
+   
+
+   
+  
