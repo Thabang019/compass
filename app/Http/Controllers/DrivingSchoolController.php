@@ -15,7 +15,27 @@ class DrivingSchoolController extends Controller
     // Display the list of driving schools with optional location filtering
     public function index(Request $request): View
     {
+        $user = auth()->user();
 
+        // Check if the user is an admin
+        if ($user->role === 'admin') {
+            // Get the driving school associated with the admin
+            $drivingSchool = $user->drivingSchool;
+
+            // Load the related instructors and vehicles
+            $drivingSchool = $drivingSchool ? $drivingSchool->load(['instructors', 'vehicles']) : null;
+
+            // Get the driving school ID
+            $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
+
+            // Return the driving school dashboard view for the admin
+            return view('drivingSchool.dashboard', [
+                'driving_school' => $drivingSchool,
+                'driving_school_id' => $drivingSchoolId,
+            ]);
+        }
+
+        // If not admin, proceed with filtering by location
         $query = DrivingSchool::query();
 
         // Filter by location if provided
@@ -28,8 +48,10 @@ class DrivingSchoolController extends Controller
 
         // Pass the results to the view
         return view('dashboard', compact('driving_schools'));
-        
     }
+
+
+
 
     // Search for driving schools by address and vehicle code
     public function search(Request $request): View
