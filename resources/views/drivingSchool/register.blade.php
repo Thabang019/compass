@@ -1,3 +1,4 @@
+
 <x-guest-layout>
     <form method="POST" action="{{ route('register.postStep1') }}" enctype="multipart/form-data">
         @csrf

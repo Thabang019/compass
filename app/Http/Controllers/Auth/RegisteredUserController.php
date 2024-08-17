@@ -55,7 +55,6 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-
         if ($user->role === 'admin') 
         {
             return redirect(route('drivingSchool.register'));
