@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" x-data="{ activeTab: 'students' }">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" x-data="{ activeTab: 'bookings' }">
         <h1 class="text-2xl text-center font-bold mb-4">Admin Dashboard</h1>
 
         @if(session('status'))
@@ -47,7 +47,7 @@
     <div>
         <div x-show="activeTab === 'bookings'" class="bg-white p-8 rounded shadow w-full">
             <h2 class="text-xl font-semibold mb-2">Bookings</h2>
-            <p>Total Students: 50</p>
+            <p>Zero Bookings</p>
             <!-- Add more student related details here -->
         </div>
 

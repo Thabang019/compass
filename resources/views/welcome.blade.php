@@ -2,14 +2,8 @@
     <x-home>
         <x-slot name="title">Compass</x-slot>
 
-        <x-slot name="heading">
-            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                {{ __('Welcome to Compass') }}
-            </h2>
-        </x-slot>
-
         <x-slot name="content">
-            <div class="max-w-4xl mx-auto mb-8">
+            <div class="max-w-3xl mx-auto mb-8">
                 <div class="py-12 text-center font-semibold text-xl text-gray-800 leading-tight">
                     <p>Welcome to Compass Driving School, your first step towards mastering the art of driving.</p>
                     <div class="mt-8">
