@@ -65,42 +65,43 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+    $request->user()->fill($request->validated());
+
+    if ($request->user()->isDirty('email')) {
+        $request->user()->email_verified_at = null;
+    }
+
     $user = $request->user();
 
-    $user->fill($request->validated());
-
-    if ($user->isDirty('email')) {
-        $user->email_verified_at = null;
-    }
-
-    if ($user->isDirty() || $request->hasFile('image')) {
-        $user->save(); // Save the user only if there are changes or a new image is uploaded
-        
-        if ($user->role === 'admin') {
-            $drivingSchool = DrivingSchool::firstOrNew(['user_id' => $user->id]);
-            $drivingSchool->fill([
+    if ($user->role === 'admin') {
+        $drivingSchool = DrivingSchool::updateOrCreate(
+            ['user_id' => $user->id],
+            [
                 'registration_number' => $request->input('registration_number'),
-                'school_name' => $request->input('school_name'),
                 'phone_number' => $request->input('phone_number'),
                 'location' => $request->input('location'),
-            ]);
+            ]
+        );
 
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $fileName = time() . '.' . $file->getClientOriginalExtension();
-                $imagePath = 'storage/';
-                $file->storeAs('public/', $fileName);
-                $drivingSchool->image = $imagePath . $fileName;
+        if ($request->hasFile('image')) {
+            if ($drivingSchool->image) {
+                Storage::delete($drivingSchool->image);
             }
-            
-                $drivingSchool->save();
 
-            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time().'.'.$extension;
+            $imagePath = 'storage/';
+            $file->storeAs('public/', $fileName);
+            $drivingSchool->image = $imagePath . $fileName;
+            $drivingSchool->save();
         }
-    
-        return redirect()->route('profile.show')->with('status', 'profile-updated');
     }
 
+    $request->user()->save();
+
+    return Redirect::route('profile.show')->with('status', 'profile-updated');
+    }
     /**
      * Delete the user's account.
      */
