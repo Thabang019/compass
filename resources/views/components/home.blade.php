@@ -20,7 +20,7 @@
           <div class="flex h-25 items-center justify-between">
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <img class="h-20 w-40 mr-5 py-4" src={{ asset('compass.png') }} alt="compasss">
+                <img class="h-30 w-40 mr-5 py-4" src={{ asset('compass-logo.png') }} alt="compasss">
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
@@ -69,7 +69,7 @@
   <div class="container mx-auto flex items-center justify-between">
 
               <div class="flex items-center">
-                  <img src={{ asset('compass.png') }} alt="compass" class="h-200 w-400 mr-4">
+                  <img src={{ asset('compass-logo.png') }} alt="compass" class="h-200 w-400 mr-4">
               </div>
 
               <div>

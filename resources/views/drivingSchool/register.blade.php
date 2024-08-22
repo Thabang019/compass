@@ -33,25 +33,25 @@
             <x-input-error :messages="$errors->get('image')" class="mt-2" />
         </div>
 
-        <!-- Location -->
+        <!-- Main Street-->
         <div class="mt-4">
-            <x-input-label for="location" :value="__('Location *')" />
+            <x-input-label for="location" :value="__('Main Street *')" />
             <x-text-input id="location" class="block mt-1 w-full" type="text" name="location" :value="old('location')" required autocomplete="location" />
             <x-input-error :messages="$errors->get('location')" class="mt-2" />
         </div>
-
-        <!-- Latitude -->
+    
+        <!-- Suburb -->
         <div class="mt-4">
-            <x-input-label for="latitude" :value="__('Latitude *')" />
-            <x-text-input id="latitude" class="block mt-1 w-full" type="text" name="latitude" :value="old('latitude')" required autocomplete="latitude" />
-            <x-input-error :messages="$errors->get('latitude')" class="mt-2" />
+            <x-input-label for="suburb" :value="__('Suburb *')" />
+            <x-text-input id="suburb" class="block mt-1 w-full" type="text" name="suburb" :value="old('suburb')" required autocomplete="suburb" />
+            <x-input-error :messages="$errors->get('suburb')" class="mt-2" />
         </div>
 
-        <!-- Longitude -->
+        <!-- City -->
         <div class="mt-4">
-            <x-input-label for="longitude" :value="__('Longitude *')" />
-            <x-text-input id="longitude" class="block mt-1 w-full" type="text" name="longitude" :value="old('longitude')" required autocomplete="longitude" />
-            <x-input-error :messages="$errors->get('longitude')" class="mt-2" />
+            <x-input-label for="city" :value="__('City *')" />
+            <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city')" required autocomplete="city"/>
+            <x-input-error :messages="$errors->get('city')" class="mt-2" />
         </div>
 
         <!-- Certificate -->

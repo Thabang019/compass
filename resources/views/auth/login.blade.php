@@ -32,7 +32,7 @@
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
 
-            <a class="underline text-sm text-gray-600 px-8 hover:text-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400" href="{{ route('register') }}">
+            <a class="inline-flex items-center underline text-sm text-gray-600 px-8 ms-2 hover:text-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400" href="{{ route('register') }}">
                     {{ __('Register') }}
             </a>
 

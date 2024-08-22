@@ -5,8 +5,23 @@
         </h2>
     </x-slot>
 
+    
     <div class="py-12">
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+            @if(session('status'))
+                <div id="statusMessage" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                    {{ session('status') }}
+                </div>
+                <script>
+                    setTimeout(function(){
+                        var statusMessage = document.getElementById('statusMessage');
+                        statusMessage.style.display = 'none';
+                    }, 5000); // Hide the status message after 5 seconds (5000 milliseconds)
+                </script>
+            @endif
+
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     @include('profile.partials.update-admin-profile')
