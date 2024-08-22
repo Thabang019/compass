@@ -1,14 +1,12 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Book a Driving Lesson at {{ $school->location }}</h1>
+    <h1 class="text-3xl font-bold mb-6"> {{ $school->school_name }}</h1>
     <div class="bg-white rounded shadow p-6">
         <form action="{{ route('book.store', $school->id) }}" method="POST" class="space-y-6">
             @csrf
             <div>
-                <label for="school" class="block text-sm font-medium text-gray-700">Driving School</label>
-                <input type="text" id="school" name="school" value="{{ $school->location }}" readonly class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                <label for="school" class="block text-sm font-medium text-gray-700">Driving School Name</label>
+                <input type="text" id="school" name="school" value="{{ $school->school_name }}" readonly class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
             </div>
             <div>
                 <label for="registration_number" class="block text-sm font-medium text-gray-700">Registration Number</label>
@@ -48,4 +46,4 @@
         </form>
     </div>
 </div>
-@endsection
+</x-app-layout>

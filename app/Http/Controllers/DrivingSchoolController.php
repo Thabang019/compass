@@ -21,61 +21,55 @@ class DrivingSchoolController extends Controller
         if ($user->role === 'admin') {
             // Get the driving school associated with the admin
             $drivingSchool = $user->drivingSchool;
-
-            // Load the related instructors and vehicles
             $drivingSchool = $drivingSchool ? $drivingSchool->load(['instructors', 'vehicles']) : null;
-
-            // Get the driving school ID
             $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
-
+    
             // Return the driving school dashboard view for the admin
             return view('drivingSchool.dashboard', [
                 'driving_school' => $drivingSchool,
                 'driving_school_id' => $drivingSchoolId,
             ]);
         }
-
-        // If not admin, proceed with filtering by location
+    
+        // Normal user - Filter by location if provided
         $query = DrivingSchool::query();
-
-        // Filter by location if provided
-        if ($request->has('location') && $request->input('location') !== null) {
+    
+        if ($request->has('location') && !empty($request->input('location'))) {
             $query->where('location', 'like', '%' . $request->input('location') . '%');
         }
-
-        // Fetch all matching driving schools
+    
+        // Fetch filtered driving schools
         $driving_schools = $query->get();
-
-        // Pass the results to the view
+    
         return view('dashboard', compact('driving_schools'));
     }
-
-
-
-
-    // Search for driving schools by address and vehicle code
     public function search(Request $request): View
-    {
-        // Validate input for search criteria
-        $validated = $request->validate([
-            'code' => 'required|integer|between:8,14',
-            'address' => 'required|string',
-        ]);
+{
+    $query = DrivingSchool::query();
 
-        // Fetch driving schools that match the search criteria
-        $driving_schools = DrivingSchool::whereHas('vehicles', function ($query) use ($validated) {
-            $query->where('code', $validated['code']);
-        })
-        ->where('location', 'like', '%' . $validated['address'] . '%')
-        ->get();
-
-        // Check if any schools were found, and set a message if none were found
-        $message = $driving_schools->isEmpty() ? "There are no registered driving schools in this area." : null;
-
-        // Return the search results and any messages to the view
-        return view('search', compact('driving_schools', 'message'));
+    if ($request->has('location') && !empty($request->input('location'))) {
+        $query->where('location', 'like', '%' . $request->input('location') . '%');
     }
 
+    $driving_schools = $query->get();
+
+    return view('dashboard', compact('driving_schools'));
+}
+
+public function getSuggestions(Request $request)
+{
+    $location = $request->input('location');
+    
+    // Fetch matching driving schools
+    $suggestions = DrivingSchool::where('location', 'like', $location . '%')
+        ->select('location')
+        ->distinct()
+        ->get();
+
+    return response()->json($suggestions);
+}
+
+   
     // Show the form for creating a new driving school
     public function create(): View
     {
