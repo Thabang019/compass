@@ -86,31 +86,7 @@ class DrivingSchoolController extends Controller
     public function store(Request $request): RedirectResponse
     {
         // Validate the input data
-        $validated = $request->validate([
-            'registration_number' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
-            'phone_number' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048', // Adjusted to handle file uploads correctly
-            'location' => 'required|string|max:255',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'status' => 'nullable|string|max:255',
-        ]);
-
-        // Handle image upload if provided
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $imagePath = 'storage/images/';
-            $file->move(public_path($imagePath), $fileName);
-            $validated['image'] = $imagePath . $fileName;
-        }
-
-        // Create a new driving school record in the database
-        DrivingSchool::create($validated);
-
-        // Redirect to the dashboard with a success message
-        return redirect()->route('dashboard')->with('success', 'Driving School Successfully Created.');
+        
     }
 
     /**

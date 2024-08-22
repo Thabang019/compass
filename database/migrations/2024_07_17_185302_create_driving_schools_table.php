@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('phone_number');
             $table->string('image')->nullable();
             $table->string('location');
-            $table->decimal('latitude', 10, 7);
-            $table->decimal('longitude', 10, 7);
+            $table->decimal('suburb');
+            $table->decimal('city');
             $table->string('certificate');
             $table->string('status')->nullable()->default('pending');
             $table->timestamps();

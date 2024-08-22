@@ -15,8 +15,8 @@ class DrivingSchool extends Model
         'phone_number',
         'image',
         'location',
-        'latitude',
-        'longitude',
+        'suburb',
+        'city',
     ];
 
     public function user()

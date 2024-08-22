@@ -22,7 +22,7 @@
 
 </head>
 <body class= "fonts-sans antialiased">
-    <dive class= "min-h-scree bg-green-300">
+    <dive class= "min-h-scree bg-gray-100">
         @include('layouts.navigation')
     
 

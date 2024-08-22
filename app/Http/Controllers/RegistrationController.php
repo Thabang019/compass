@@ -27,8 +27,8 @@ class RegistrationController extends Controller
             'school_name' => 'required|string|max:100',
             'image' => 'nullable|image',
             'location' => 'required|string|max:100',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'suburb' => 'required|string',
+            'city' => 'required|string',
             'status' => 'string|max:25',
             'certificate' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
@@ -47,8 +47,8 @@ class RegistrationController extends Controller
         $drivingSchool->school_name = $request->input('school_name');
         $drivingSchool->phone_number = $request->input('phone_number');
         $drivingSchool->location = $request->input('location');
-        $drivingSchool->latitude = $request->input('latitude');
-        $drivingSchool->longitude = $request->input('longitude');
+        $drivingSchool->latitude = $request->input('suburb');
+        $drivingSchool->longitude = $request->input('city');
 
         if ($request->hasFile('certificate')) {
             $certificateFile = $request->file('certificate');
