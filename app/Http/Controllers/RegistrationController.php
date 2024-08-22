@@ -47,8 +47,8 @@ class RegistrationController extends Controller
         $drivingSchool->school_name = $request->input('school_name');
         $drivingSchool->phone_number = $request->input('phone_number');
         $drivingSchool->location = $request->input('location');
-        $drivingSchool->latitude = $request->input('suburb');
-        $drivingSchool->longitude = $request->input('city');
+        $drivingSchool->suburb = $request->input('suburb');
+        $drivingSchool->city = $request->input('city');
 
         if ($request->hasFile('certificate')) {
             $certificateFile = $request->file('certificate');

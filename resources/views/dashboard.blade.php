@@ -11,7 +11,7 @@
         @foreach($driving_schools as $school)
             <a href="{{ route('book.create', $school->id) }}" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-200">
                 <div class="mb-4">
-                    <img src="{{ asset('storage/' . $school->image) }}" alt="{{ $school->location }}" class="w-full h-40 object-cover rounded-lg">
+                <img src="{{asset($school->image)}}" alt="{{ asset($school->image) }}"  class="w-full h-60 object-cover rounded-lg">
                 </div>
                 <h2 class="text-xl font-semibold mb-2">{{ $school->location }}</h2>
                 <p class="text-gray-700 mb-2">Registration Number: {{ $school->registration_number }}</p>

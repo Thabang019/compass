@@ -95,6 +95,20 @@
             <x-input-error class="mt-2" :messages="$errors->get('location')" />
         </div>
 
+         <!-- Suburb -->
+         <div class="mt-4">
+            <x-input-label for="suburb" :value="__('Suburb *')" />
+            <x-text-input id="suburb" class="block mt-1 w-full" type="text" name="suburb" :value="old('suburb', $drivingSchoolData->suburb)" required autocomplete="suburb" />
+            <x-input-error :messages="$errors->get('suburb')" class="mt-2" />
+        </div>
+
+        <!-- City -->
+        <div class="mt-4">
+            <x-input-label for="city" :value="__('City *')" />
+            <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $drivingSchoolData->city)" required autocomplete="city"/>
+            <x-input-error :messages="$errors->get('city')"/>
+        </div>
+
         <!-- Status -->
         <div>
             <x-input-label for="status" :value="__('Status')" class="text-blue-500"/>
