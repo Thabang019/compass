@@ -15,11 +15,11 @@
         @endif
 
         @if (session('error'))
-        <div id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-            {{ session('error') }}
-        </div>
-            <script>
-                setTimeout(function(){
+            <div id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                {{ session('error') }}
+            </div>
+                <script>
+                    setTimeout(function(){
                     var errorMessage = document.getElementById('errorMessage');
                     if (errorMessage) {
                         errorMessage.style.display = 'none';
@@ -65,11 +65,11 @@
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <a href="javascript:void(0);" onclick="openModal('editVehicleModal', {{ $vehicle->id }})" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <x-dropdown-link href="#" @click.prevent="$dispatch('open-vehicle-modal', {{ $vehicle->id }})">
                                 {{ __('Edit') }}
-                            </a>
+                            </x-dropdown-link>
 
-                            <x-dropdown-link :href="route('drivingSchool.edit', $vehicle)">
+                            <x-dropdown-link :href="route('drivingSchool.delete', $vehicle)">
                                 {{ __('Delete') }}
                             </x-dropdown-link>
                         </x-slot>
@@ -84,36 +84,121 @@
         </div>
 
         
+         <!-- Edit Vehicle Modal -->
+        @if(isset($vehicle))
+        <<div x-data="{ show: false }" @open-vehicle-modal.window="show = ($event.detail == {{ $vehicle->id }})" x-show="show" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
+                <h2 class="text-xl font-semibold mb-4">Edit Vehicle</h2>
+                <form method="POST" action="{{ route('drivingSchool.update', $vehicle) }}">
+                    @csrf
+                    @method('PUT')
 
+                    <!-- Hidden Driving School ID -->
+                    <input id="driving_school_id" name="driving_school_id" type="hidden" value="{{ $driving_school_id }}" readonly>
+
+                    <!-- Hidden User ID -->
+                    <x-text-input id="user_id" type="hidden" name="user_id" :value="auth()->user()->id" />
+
+                    <!-- Registration Number -->
+                    <div>
+                        <x-input-label for="registration_number" :value="__('Registration Number')" />
+                        <x-text-input id="registration_number" class="block mt-1 w-full" type="text" name="registration_number" 
+                                    :value="old('registration_number', $vehicle->registration_number)" required autofocus />
+                        <x-input-error :messages="$errors->get('registration_number')" class="mt-2" />
+                    </div>
+
+                    <!-- Vehicle Code -->
+                    <div class="mt-4">
+                        <x-input-label for="code" :value="__('Code')" />
+                        <select id="code" name="code" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                            <option value="8" {{ $vehicle->code == 8 ? 'selected' : '' }}>8</option>
+                            <option value="10" {{ $vehicle->code == 10 ? 'selected' : '' }}>10</option>
+                            <option value="14" {{ $vehicle->code == 14 ? 'selected' : '' }}>14</option>
+                        </select>
+                        <x-input-error :messages="$errors->get('code')" class="mt-2" />
+                    </div>
+
+                    <!-- VIN Number -->
+                    <div class="mt-4">
+                        <x-input-label for="vin_number" :value="__('VIN Number')" />
+                        <x-text-input id="vin_number" class="block mt-1 w-full" type="text" name="vin_number" 
+                                    :value="old('vin_number', $vehicle->vin_number)" required />
+                        <x-input-error :messages="$errors->get('vin_number')" class="mt-2" />
+                    </div>
+
+                    <div class="flex justify-end px-4 py-2 mt-2">
+                        <button type="button" @click="show = false" class="mt-3 mr-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-green text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal('editVehicleModal')">
+                            Cancel
+                        </button>
+                        <x-primary-button>{{ __('Update Vehicle') }}</x-primary-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endif
+
+
+        <!--Instructor Pill-->
         <div x-show="activeTab === 'instructors'" class="bg-white p-8 rounded-lg shadow-md w-full">
             <ul class="space-y-4">
                 @foreach($driving_school->instructors as $instructor)
-                    <li class="p-4 bg-gray-50 rounded-lg shadow-sm flex justify-between items-center hover:bg-gray-100 transition">
+                <li class="p-4 bg-gray-50 rounded-lg shadow-sm flex justify-between items-center hover:bg-gray-100 transition">
                     <div class="flex justify-between items-center">
-                    <x-dropdown>
-                        <x-slot name="trigger">
-                            <button>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                                </svg>
-                            </button>
-                        </x-slot>
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('drivingSchool.edit', $instructor)">
-                                {{ __('Edit') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('drivingSchool.edit', $instructor)">
-                                {{ __('Delete') }}
-                            </x-dropdown-link>
-                        </x-slot>
-                    </x-dropdown>
+                        <x-dropdown>
+                            <x-slot name="trigger">
+                                <button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    </svg>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link href="#" @click.prevent="$dispatch('open-instructor-modal', {{ $instructor->id }})">
+                                    {{ __('Edit') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('drivingSchool.delete-in', $instructor)">
+                                    {{ __('Delete') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
                     </div>
-                        <span class="text-gray-700 font-medium"> Name : {{ $instructor->name }}</span>
-                        <span class="text-gray-700"> Phone Number : {{ $instructor->phone_number }}</span>
-                    </li>
+                    <span class="text-gray-700 font-medium"> Name: {{ $instructor->name }}</span>
+                    <span class="text-gray-700"> Phone Number: {{ $instructor->phone_number }}</span>
+                </li>
                 @endforeach
             </ul>
         </div>
+
+        <!-- Edit Instructor Modal -->
+         @if(isset($instructor))
+        <div x-data="{ show: false }" @open-instructor-modal.window="show = ($event.detail == {{ $instructor->id }})" x-show="show" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
+                <h2 class="text-xl font-semibold mb-4">Edit Instructor</h2>
+                <form method="POST" action="{{ route('drivingSchool.update-in', $instructor) }}">
+                    @csrf
+                    @method('PUT')
+
+                    <!-- Name -->
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" id="name" name="name" value="{{ old('name', $instructor->name) }}" class="mt-1 p-2 w-full border rounded-md">
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="mb-4">
+                        <label for="phone_number" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="text" id="phone_number" name="phone_number" value="{{ old('phone_number', $instructor->phone_number) }}" class="mt-1 p-2 w-full border rounded-md">
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-end">
+                        <button type="button" @click="show = false" class="mr-2 px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endif
 
     </div>
 
