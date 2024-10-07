@@ -39,7 +39,7 @@ class DrivingSchoolController extends Controller
         }
     
         // Fetch filtered driving schools
-        $driving_schools = $query->get();
+         $driving_schools = DrivingSchool::where('status', 'approved')->get();
     
         return view('dashboard', compact('driving_schools'));
     }
@@ -51,7 +51,7 @@ class DrivingSchoolController extends Controller
         $query->where('location', 'like', '%' . $request->input('location') . '%');
     }
 
-    $driving_schools = $query->get();
+    $driving_schools = DrivingSchool::where('status', 'approved')->get();
 
     return view('dashboard', compact('driving_schools'));
 }
