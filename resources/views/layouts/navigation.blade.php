@@ -49,6 +49,9 @@
                                 <x-nav-link :href="route('systemAdmin.dashboard')" :active="request()->routeIs('systemAdmin.dashboard')">
                                     {{ __('Dashboard') }}
                                 </x-nav-link>
+                                <x-nav-link :href="route('systemAdmin.rejected')" :active="request()->routeIs('systemAdmin.rejected')">
+                                    {{ __('Rejected Driving schools') }}
+                                </x-nav-link>
                             @endif
                         @endif
                 </div>

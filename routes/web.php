@@ -15,6 +15,7 @@ Route::get('/search', function () {
 });
 
 Route::get('systemAdmin/dashboard', [SystemAdminController::class, 'dashboard'])->name('systemAdmin.dashboard');
+Route::get('systemAdmin/dashboard/rejected', [SystemAdminController::class, 'rejectedSchools'])->name('systemAdmin.rejected');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
