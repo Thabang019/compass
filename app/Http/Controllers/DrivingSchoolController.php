@@ -74,12 +74,6 @@ public function getSuggestions(Request $request)
         return view('drivingSchool.create');
     }
 
-    // Store a newly created driving school in the database
-    public function store(Request $request): RedirectResponse
-    {
-        // Validate the input data
-        
-    }
 
     /**
      * Display the specified resource.
@@ -98,9 +92,6 @@ public function getSuggestions(Request $request)
         return redirect()->route('drivingSchools.show', $drivingSchool)->with('status', 'Driving school status updated!');
     }
     
-   
-
-
     public function store_instructor(Request $request) : RedirectResponse
     {
         $user = auth()->user();
@@ -158,6 +149,53 @@ public function getSuggestions(Request $request)
     $vehicle->save();
 
     return redirect()->route('drivingSchool.index')->with('status', 'Vehicle Added!');
-
     }
+
+    public function updateVehicle(Request $request, Vehicle $vehicle): RedirectResponse
+    {
+       $validated = $request->validate([
+            'registration_number' => 'required|string|max:25',
+            'code' => 'required|string|max:10',
+            'vin_number' => 'required|string|max:25|unique:vehicles,vin_number',
+            'driving_school_id' => 'required|exists:driving_schools,id',
+        ]);
+ 
+        $vehicle->update($validated);
+ 
+        return redirect()->route('drivingSchool.index')->with('success', 'Vehicle updated successfully.');
+    }
+
+    public function deleteVehicle(Vehicle $vehicle)
+    {
+        // Delete the vehicle
+       $vehicle->delete();
+
+        // Redirect back or to another page with a success message
+        return redirect()->route('drivingSchool.index')->with('success', 'Vehicle deleted successfully.');
+    }
+
+    public function updateInstructor(Request $request, Instructor $instructor): RedirectResponse
+    {
+        // Validate the form data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
+        ]);
+
+        // Update the instructor with the validated data
+        $instructor->update($validatedData);
+
+        // Redirect with a success message
+        return redirect()->route('drivingSchool.index')->with('success', 'Instructor updated successfully.');
+    }
+
+    public function deleteInstructor(Instructor $instructor)
+    {
+        // Delete the instructor
+        $instructor->delete();
+
+        // Redirect back or to another page with a success message
+        return redirect()->route('drivingSchool.index')->with('success', 'Instructor deleted successfully.');
+    }
+
 }

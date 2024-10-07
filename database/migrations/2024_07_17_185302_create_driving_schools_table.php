@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('phone_number');
             $table->string('image')->nullable();
             $table->string('location');
-            $table->decimal('suburb');
-            $table->decimal('city');
+            $table->string('suburb');
+            $table->string('city');
             $table->string('certificate');
             $table->string('status')->nullable()->default('pending');
             $table->decimal('price_per_lesson', 8, 2);  // Add price per lesson

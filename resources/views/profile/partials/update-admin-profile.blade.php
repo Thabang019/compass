@@ -8,6 +8,19 @@
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
+    @if (session('error'))
+        <div id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {{ session('error') }}
+        </div>
+            <script>
+                setTimeout(function(){
+                    var errorMessage = document.getElementById('errorMessage');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }, 5000); // Hide the error message after 5 seconds (5000 milliseconds)
+            </script>
+        @endif
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
@@ -93,6 +106,20 @@
             <x-input-label for="location" :value="__('Location')" class="text-blue-500"/>
             <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $drivingSchoolData->location)" required autofocus autocomplete="location" />
             <x-input-error class="mt-2" :messages="$errors->get('location')" />
+        </div>
+
+         <!-- Suburb -->
+         <div class="mt-4">
+            <x-input-label for="suburb" :value="__('Suburb *')" />
+            <x-text-input id="suburb" class="block mt-1 w-full" type="text" name="suburb" :value="old('suburb', $drivingSchoolData->suburb)" required autocomplete="suburb" />
+            <x-input-error :messages="$errors->get('suburb')" class="mt-2" />
+        </div>
+
+        <!-- City -->
+        <div class="mt-4">
+            <x-input-label for="city" :value="__('City *')" />
+            <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $drivingSchoolData->city)" required autocomplete="city"/>
+            <x-input-error :messages="$errors->get('city')"/>
         </div>
 
         <!-- Status -->

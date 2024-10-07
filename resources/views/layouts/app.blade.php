@@ -131,9 +131,7 @@
                             </div>
                         </div>
                     </div>
-       
-
-
+                                
         <script>
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\DrivingSchool;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -56,6 +57,7 @@ class ProfileController extends Controller
             return view('profile.admin', [
                 'drivingSchoolData' => $drivingSchoolData,
                 'userEmail' => $drivingSchoolData->user->email,
+                'userID' => $drivingSchoolData->user->id,
             ]);
         }
     }
@@ -102,19 +104,30 @@ class ProfileController extends Controller
 
     return Redirect::route('profile.show')->with('status', 'profile-updated');
     }
+
+
+
     /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse
-    {
+{
+    $user = $request->user();
+
+    if ($user->role === 'root' && $request->has('user_id')) {
+        $targetUser = User::findOrFail($request->input('user_id'));
+
+        $targetUser->delete();
+        return redirect(route('systemAdmin.dashboard'))->with('success', 'User account deleted successfully.');
+    }
+
+    // Regular user deleting their own account
+    if ($user->role !== 'root') {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = $request->user();
-
         Auth::logout();
-
         $user->delete();
 
         $request->session()->invalidate();
@@ -122,4 +135,8 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    return Redirect::back()->with('error', 'You cannot delete your own account.');
+}
+
 }

@@ -11,8 +11,8 @@
                     <p class="text-lg mb-2"><span class="font-semibold">Email: {{ $drivingSchool->user->email }}</p>
                     <p class="text-lg mb-2"><span class="font-semibold">Phone Number:</span> {{ $drivingSchool->phone_number }}</p>
                     <p class="text-lg mb-2"><span class="font-semibold">Location:</span> {{ $drivingSchool->location }}</p>
-                    <p class="text-lg mb-2"><span class="font-semibold">Latitude:</span> {{ $drivingSchool->latitude }}</p>
-                    <p class="text-lg mb-2"><span class="font-semibold">Longitude:</span> {{ $drivingSchool->longitude }}</p>
+                    <p class="text-lg mb-2"><span class="font-semibold">Suburb:</span> {{ $drivingSchool->suburb }}</p>
+                    <p class="text-lg mb-2"><span class="font-semibold">City:</span> {{ $drivingSchool->city }}</p>
                     <p class="text-lg mb-2"><span class="font-semibold">Status:</span> {{ ucfirst($drivingSchool->status) }}</p>
                     
                     <form action="{{ route('drivingSchools.updateStatus', $drivingSchool) }}" method="POST" class="mt-6 flex space-x-4">
