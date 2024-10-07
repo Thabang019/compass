@@ -58,13 +58,11 @@ class DrivingSchoolController extends Controller
 
 public function getSuggestions(Request $request)
 {
-    $location = $request->input('location');
-    
-    // Fetch matching driving schools
-    $suggestions = DrivingSchool::where('location', 'like', $location . '%')
-        ->select('location')
-        ->distinct()
-        ->get();
+    $query = $request->input('query');
+    $suggestions = DrivingSchool::where('location', 'LIKE', "{$query}%")
+                                ->select('location')
+                                ->distinct()
+                                ->get();
 
     return response()->json($suggestions);
 }
