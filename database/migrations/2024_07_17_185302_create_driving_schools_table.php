@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('city');
             $table->string('certificate');
             $table->string('status')->nullable()->default('pending');
+            $table->decimal('price_per_lesson', 8, 2);  // Add price per lesson
+            $table->json('working_hours')->nullable();
             $table->timestamps();
         });
     }
