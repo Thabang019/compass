@@ -50,8 +50,10 @@
             <ul id="booking-list" class="space-y-4">
                 <!-- Bookings will be appended here -->
             </ul>
+
+            <!-- Confirm and Pay Button -->
             <div class="mt-6">
-                <button type="button" id="confirm-bookings" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                <button type="submit" id="confirm-bookings" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                     Confirm and Pay
                 </button>
             </div>
@@ -61,6 +63,7 @@
     <script>
         let bookings = [];
 
+        // Add Booking to the List
         document.getElementById('add-booking').addEventListener('click', function() {
             const date = document.getElementById('date').value;
             const time = document.getElementById('time').value;
@@ -85,6 +88,7 @@
             }
         });
 
+        // Update the Booking List
         function updateBookingList() {
             const bookingList = document.getElementById('booking-list');
             bookingList.innerHTML = ''; // Clear the current list
@@ -103,17 +107,38 @@
             });
         }
 
-        // Function to remove a booking from the list
+        // Remove a Booking from the List
         function removeBooking(index) {
             bookings.splice(index, 1); // Remove the booking at the given index
             updateBookingList(); // Update the display
         }
 
-        document.getElementById('confirm-bookings').addEventListener('click', function() {
-            // Implement the logic to handle the confirmation and payment
-            alert('Bookings confirmed. Proceed to payment.');
+        // Confirm and Pay Action
+        document.getElementById('confirm-bookings').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            if (bookings.length > 0) {
+                // Send bookings to the server via POST and redirect to confirmation page
+                fetch('/store-bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify({ bookings: bookings })
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = "/bookings/confirm"; // Redirect to confirmation page
+                    } else {
+                        alert('Failed to confirm bookings.');
+                    }
+                });
+            } else {
+                alert('No bookings to confirm.');
+            }
         });
 
+        // Calculate the End Time
         function calculateEndTime(startTime, duration) {
             const [hours, minutes] = startTime.split(':').map(Number);
             const endHours = (hours + parseInt(duration)) % 24;
@@ -122,4 +147,3 @@
         }
     </script>
 </x-app-layout>
-

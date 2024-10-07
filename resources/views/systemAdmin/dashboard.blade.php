@@ -2,6 +2,20 @@
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" x-data="{ activeTab: 'registrations' }">
         <h1 class="text-2xl text-center font-bold mb-4">Compass Root Admin</h1>
 
+        @if(session('status'))
+            <div id="statusMessage" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                {{ session('status') }}
+            </div>
+            <script>
+                setTimeout(function(){
+                    var statusMessage = document.getElementById('statusMessage');
+                    statusMessage.style.display = 'none';
+                }, 5000); // Hide the status message after 5 seconds (5000 milliseconds)
+            </script>
+        @endif
+
+       
+
         <!-- Pill Tabs -->
         <div class="mb-6">
         <nav class="flex space-x-10">
@@ -11,7 +25,7 @@
                 <button @click="activeTab = 'schools'" :class="{'bg-blue-500 text-white': activeTab === 'schools', 'bg-gray-200 text-gray-700': activeTab !== 'schools'}" class="px-4 py-2 rounded-full focus:outline-none w-full bg-gray-200 text-gray-700">
                     Driving Schools
                 </button>
-                <button @click="activeTab = 'instructors'" :class="{'bg-blue-500 text-white': activeTab === 'instructors', 'bg-gray-200 text-gray-700': activeTab !== 'instructors'}" class="px-4 py-2 rounded-full focus:outline-none w-full bg-gray-200 text-gray-700">
+                <button @click="activeTab = 'bookings'" :class="{'bg-blue-500 text-white': activeTab === 'bookings', 'bg-gray-200 text-gray-700': activeTab !== 'bookings'}" class="px-4 py-2 rounded-full focus:outline-none w-full bg-gray-200 text-gray-700">
                     Bookings
                 </button>
             </nav>
@@ -53,6 +67,7 @@
                     <p class="text-gray-600">{{ $drivingSchool->location }}</p>
                     <p class="text-gray-600">{{ $drivingSchool->phone_number }}</p>
                     <p class="text-gray-500">Registered by: {{ $drivingSchool->user->name }}</p>
+                    <p class="text-gray-500">Status : {{ $drivingSchool->status }}</p>
                     <a href="{{ route('profile.displayDrivingSchoolProfile', $drivingSchool->id) }}" class="mt-2 inline-block bg-blue-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">View Details</a>
                 </div>
             </div>
@@ -61,9 +76,9 @@
     
 
 
-        <div x-show="activeTab === 'instructors'" class="bg-white p-8 rounded shadow w-full">
-            <h2 class="text-xl font-semibold mb-2">Instructors</h2>
-            <p>Total Instructors: 10</p>
+        <div x-show="activeTab === 'bookings'" class="bg-white p-8 rounded shadow w-full">
+            <h2 class="text-xl font-semibold mb-2">Bookings</h2>
+            <p>No Bookings Available</p>
             <!-- Add more instructor related details here -->
         </div>
 

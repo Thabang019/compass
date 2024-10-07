@@ -35,8 +35,12 @@ Route::get('instructor/register', [RegistrationController::class, 'instructor'])
 Route::post('instructor/register', [RegistrationController::class, 'postStep3'])->name('register.postStep3');
 
 Route::get('drivingSchool', [DrivingSchoolController::class, 'index'])->name('drivingSchool.dashboard');
-Route::get('/driving-school/{instructor}/edit', [DrivingSchoolController::class, 'edit'])->name('drivingSchool.edit');
 
+Route::put('/driving-school/instructors/{instructor}', [DrivingSchoolController::class, 'updateInstructor'])->name('drivingSchool.update-in');
+Route::delete('/driving-school/instructors/{instructor}', [DrivingSchoolController::class, 'deleteInstructor'])->name('drivingSchool.delete-in');
+
+Route::put('/driving-school/vehicles/{vehicle}', [DrivingSchoolController::class, 'updateVehicle'])->name('drivingSchool.update');
+Route::delete('/driving-school/vehicles/{vehicle}', [DrivingSchoolController::class, 'deleteVehicle'])->name('drivingSchool.delete');
 
 Route::get('/driving-schools/{drivingSchool}', [DrivingSchoolController::class, 'show'])->name('drivingSchools.show');
 Route::post('/driving-schools/{drivingSchool}/update-status', [DrivingSchoolController::class, 'updateStatus'])->name('drivingSchools.updateStatus');
@@ -52,7 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/learner/dashboard', [LearnerController::class, 'index'])->name('learner.dashboard');
     Route::post('/learner/book-school', [LearnerController::class, 'bookSchool'])->name('learner.book_school');
 
-   
+    Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::get('/book/{school}', [BookingController::class, 'create'])->name('book.create');
     Route::post('/book', [BookingController::class, 'store'])->name('book.store');
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
