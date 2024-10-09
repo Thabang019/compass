@@ -5,6 +5,7 @@ use App\Http\Controllers\LearnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DrivingSchoolController;
 use App\Http\Controllers\SystemAdminController;
+use App\Http\Controllers\WorkingHoursController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -64,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 });
 
+Route::post('working-hours/store', [WorkingHoursController::class, 'store'])->name('working_hours.store');
+Route::post('/session',  [StripeController::class, 'session'])->name('session');
 
 Route::post('/drivingSchool/store-instructor', [DrivingSchoolController::class, 'store_instructor'])
     ->name('instructors.store')

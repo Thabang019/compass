@@ -131,6 +131,57 @@
                             </div>
                         </div>
                     </div>
+
+                     <!-- Modal for Creating Schedule -->
+                    <div id="createScheduleModal" class="fixed inset-0 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+                            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <div>
+                                        <div class="space-y-4">
+                                            <h3 class="text-lg leading-6 text-center font-semibold text-gray-900" id="modal-title">Edit Working Hours for Company</h3>
+                                            <div class="mt-2">
+
+                                                <input id="driving_school_id" name="driving_school_id" type="hidden" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value="{{ $driving_school_id }}" readonly>
+
+                                                <x-text-input id="user_id" type="hidden" name="user_id" :value="auth()->user()->id"/>
+
+                                                <form action="{{ route('working_hours.store') }}" enctype="multipart/form-data" method="POST">
+                                                    @csrf
+                                                
+                                                    @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
+                                                        <div class="flex items-center space-x-4">
+                                                            <label class="w-24 font-semibold text-gray-700">{{ $day }}:</label>
+                                                            <input type="hidden" name="working_hours[{{ $day }}][day_of_week]" value="{{ $day }}">
+
+                                                            <input type="time" name="working_hours[{{ $day }}][opening_time]" 
+                                                                placeholder="Opening Time" 
+                                                                class="px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500">
+
+                                                            <input type="time" name="working_hours[{{ $day }}][closing_time]" 
+                                                                placeholder="Closing Time" 
+                                                                class="px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500">
+                                                        </div>
+                                                    @endforeach
+
+                                                    <div class="mt-4">
+                                                    <x-primary-button>{{ __('Save') }}</x-primary-button>
+                                                    </div>
+                                                </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div class="bg-gray-250 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal('createScheduleModal')">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                                 
         <script>
         function openModal(modalId) {
