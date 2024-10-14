@@ -66,6 +66,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('working-hours/store', [WorkingHoursController::class, 'store'])->name('working_hours.store');
+Route::get('working-hours/schedule', [WorkingHoursController::class, 'schedule'])->name('working_hours.schedule');
+Route::put('/working_hours/{id}', [WorkingHoursController::class, 'update'])->name('working_hours.update');
+
 Route::post('/session',  [StripeController::class, 'session'])->name('session');
 
 Route::post('/drivingSchool/store-instructor', [DrivingSchoolController::class, 'store_instructor'])

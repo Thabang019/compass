@@ -18,7 +18,11 @@
                             {{ __('Dashboard') }}
                             </x-nav-link>
 
-                            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                            <x-nav-link :href="route('working_hours.schedule')" :active="request()->routeIs('working_hours.schedule')">
+                                {{ __('Schedule') }}
+                            </x-nav-link>
+
+                            <div class="hidden ml-4 sm:flex sm:items-center sm:ms-6">
                                 <x-dropdown align="right" width="48">
                                     <x-slot name="trigger">
                                         <button class="inline-flex items-center px-3 py-2 border text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -36,7 +40,7 @@
                                         <a href="javascript:void(0)" onclick="openModal('addVehicleModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Add Vehicle') }}</a>
                                         <a href="javascript:void(0)" onclick="openModal('createScheduleModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Create Schedule') }}</a>
                                     </x-slot>
-                                </x-dropdown>
+                                </x-dropdown>      
                             </div>
 
                             @elseif(Auth::user()->role === 'user')
