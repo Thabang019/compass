@@ -91,7 +91,7 @@ class WorkingHoursController extends Controller
         $workingHour->save();
 
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Working hours updated successfully!');
+        return redirect()->back()->with('status', 'Working hours updated successfully!');
 
     } catch (\Exception $e) {
         // Log any other general exceptions

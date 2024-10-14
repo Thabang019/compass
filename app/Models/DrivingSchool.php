@@ -18,6 +18,7 @@ class DrivingSchool extends Model
         'location',
         'suburb',
         'city',
+        'price_per_lesson',
     ];
 
     public function user()
