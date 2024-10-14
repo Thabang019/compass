@@ -91,6 +91,14 @@ public function getSuggestions(Request $request)
 
         return redirect()->route('drivingSchools.show', $drivingSchool)->with('status', 'Driving school status updated!');
     }
+
+    public function updateLessonPrice(Request $request, DrivingSchool $drivingSchool)
+    {
+        $drivingSchool->price_per_lesson = $request->input('price_per_lesson');
+        $drivingSchool->save();
+
+        return redirect()->route('drivingSchool.index')->with('status', 'Driving school lesson price updated!');
+    }
     
     public function store_instructor(Request $request) : RedirectResponse
     {

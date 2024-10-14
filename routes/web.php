@@ -46,6 +46,7 @@ Route::delete('/driving-school/vehicles/{vehicle}', [DrivingSchoolController::cl
 
 Route::get('/driving-schools/{drivingSchool}', [DrivingSchoolController::class, 'show'])->name('drivingSchools.show');
 Route::post('/driving-schools/{drivingSchool}/update-status', [DrivingSchoolController::class, 'updateStatus'])->name('drivingSchools.updateStatus');
+Route::post('/drivingSchools/{drivingSchool}/update-price', [DrivingSchoolController::class, 'updateLessonPrice'])->name('drivingSchool.updatePrice');
 
 Route::get('/profile/{id}', [ProfileController::class, 'displayDrivingSchoolProfile'])->name('profile.displayDrivingSchoolProfile');
 

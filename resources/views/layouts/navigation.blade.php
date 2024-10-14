@@ -39,6 +39,7 @@
                                         <a href="javascript:void(0)" onclick="openModal('addInstructorModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Add Instructor') }}</a>
                                         <a href="javascript:void(0)" onclick="openModal('addVehicleModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Add Vehicle') }}</a>
                                         <a href="javascript:void(0)" onclick="openModal('createScheduleModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Create Schedule') }}</a>
+                                        <a href="#" @click.prevent="$dispatch('open-price-modal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Update Lesson Price') }}</a>
                                     </x-slot>
                                 </x-dropdown>      
                             </div>

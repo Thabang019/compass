@@ -200,6 +200,29 @@
         </div>
         @endif
 
+        <!-- Edit Price Modal -->
+        <div x-data="{ show: false }" @open-price-modal.window="show = true" x-show="show" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <div class="bg-white p-8 rounded-lg shadow-lg w-1/3 max-w-md">
+                <h2 class="text-2xl font-semibold mb-6 text-center text-gray-800">Update Lesson Price</h2>
+                <form action="{{ route('drivingSchool.updatePrice', $driving_school) }}" method="POST" class="mt-6 flex flex-col space-y-4">
+                    @csrf
+                    <!-- price_per_lesson -->
+                    <div>
+                        <x-input-label for="price_per_lesson" :value="__('Price Per Lesson *')" class="text-gray-700" />
+                        <x-text-input id="price_per_lesson" class="block mt-1 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500" type="number" step="0.01" name="price_per_lesson" :value="old('price_per_lesson', $driving_school->price_per_lesson)" required autocomplete="off" />
+                        <x-input-error :messages="$errors->get('price_per_lesson')" />
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" @click="show = false" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition duration-200">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
     </div>
 
     </div>
