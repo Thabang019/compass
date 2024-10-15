@@ -12,8 +12,15 @@ class SystemAdminController extends Controller
     public function dashboard() : View
     {
         $allDrivingSchools = DrivingSchool::where('status', 'approved')->get();
+        $rejectedDrivingSchools = DrivingSchool::where('status', 'rejected')->get();
         $drivingSchools = DrivingSchool::where('status', 'pending')->get();
         return view('systemAdmin.dashboard', compact('allDrivingSchools','drivingSchools'));
+    }
+
+    public function rejectedSchools() : View
+    {  
+        $rejectedDrivingSchools = DrivingSchool::where('status', 'rejected')->get();
+        return view('systemAdmin.rejected', compact('rejectedDrivingSchools'));
     }
 
 }

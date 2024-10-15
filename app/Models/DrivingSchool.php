@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DrivingSchool extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'registration_number',
         'user_id',
@@ -17,6 +18,7 @@ class DrivingSchool extends Model
         'location',
         'suburb',
         'city',
+        'price_per_lesson',
     ];
 
     public function user()
@@ -32,5 +34,10 @@ class DrivingSchool extends Model
     public function instructors()
     {
         return $this->hasMany(Instructor::class);
+    }
+
+    public function workingHours()
+    {
+        return $this->hasMany(Hour::class);
     }
 }

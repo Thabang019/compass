@@ -82,6 +82,7 @@ class ProfileController extends Controller
                 'registration_number' => $request->input('registration_number'),
                 'phone_number' => $request->input('phone_number'),
                 'location' => $request->input('location'),
+                'price_per_lesson' => $request->input('price_per_lesson'),
             ]
         );
 

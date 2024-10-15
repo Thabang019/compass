@@ -39,7 +39,7 @@ class DrivingSchoolController extends Controller
         }
     
         // Fetch filtered driving schools
-        $driving_schools = $query->get();
+         $driving_schools = DrivingSchool::where('status', 'approved')->get();
     
         return view('dashboard', compact('driving_schools'));
     }
@@ -51,7 +51,7 @@ class DrivingSchoolController extends Controller
         $query->where('location', 'like', '%' . $request->input('location') . '%');
     }
 
-    $driving_schools = $query->get();
+    $driving_schools = DrivingSchool::where('status', 'approved')->get();
 
     return view('dashboard', compact('driving_schools'));
 }
@@ -90,6 +90,14 @@ public function getSuggestions(Request $request)
         $drivingSchool->save();
 
         return redirect()->route('drivingSchools.show', $drivingSchool)->with('status', 'Driving school status updated!');
+    }
+
+    public function updateLessonPrice(Request $request, DrivingSchool $drivingSchool)
+    {
+        $drivingSchool->price_per_lesson = $request->input('price_per_lesson');
+        $drivingSchool->save();
+
+        return redirect()->route('drivingSchool.index')->with('status', 'Driving school lesson price updated!');
     }
     
     public function store_instructor(Request $request) : RedirectResponse

@@ -108,7 +108,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('location')" />
         </div>
 
-         <!-- Suburb -->
+        <!-- Suburb -->
          <div class="mt-4">
             <x-input-label for="suburb" :value="__('Suburb *')" />
             <x-text-input id="suburb" class="block mt-1 w-full" type="text" name="suburb" :value="old('suburb', $drivingSchoolData->suburb)" required autocomplete="suburb" />
@@ -120,6 +120,13 @@
             <x-input-label for="city" :value="__('City *')" />
             <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $drivingSchoolData->city)" required autocomplete="city"/>
             <x-input-error :messages="$errors->get('city')"/>
+        </div>
+
+        <!-- price_per_lesson -->
+        <div class="mt-4">
+            <x-input-label for="price_per_lesson" :value="__('Price Per Lesson *')" />
+            <x-text-input id="price_per_lesson" class="block mt-1 w-full" type="number" step="0.01" name="price_per_lesson" :value="old('price_per_lesson', $drivingSchoolData->price_per_lesson)" required autocomplete="city"/>
+            <x-input-error :messages="$errors->get('price_per_lesson')"/>
         </div>
 
         <!-- Status -->
