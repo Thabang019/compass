@@ -106,6 +106,10 @@ class ProfileController extends Controller
     return Redirect::route('profile.show')->with('status', 'profile-updated');
     }
 
+public function edit() {
+    $userID = Auth::user()->id; // Assuming you want the current user's ID
+    return view('profile.edit', compact('userID'));
+}
 
 
     /**

@@ -6,6 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DrivingSchoolController;
 use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\WorkingHoursController;
+use App\Http\Controllers\PaymentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,6 +16,14 @@ Route::get('/', function () {
 Route::get('/search', function () {
     return view('search');
 });
+
+Route::get('/bookings/confirm', [PaymentController::class, 'confirm'])->name('bookings.confirm');
+Route::post('/store-bookings', [BookingController::class, 'store']);
+Route::post('/bookings/confirm-payment', [BookingController::class, 'finalizePayment'])->name('bookings.finalizePayment');
+Route::post('/book/pay', [PaymentController::class, 'processPayment'])->name('book.pay');
+Route::get('/book/confirm', [BookingController::class, 'showConfirmationPage'])->name('book.confirm');
+
+
 
 Route::get('systemAdmin/dashboard', [SystemAdminController::class, 'dashboard'])->name('systemAdmin.dashboard');
 Route::get('systemAdmin/dashboard/rejected', [SystemAdminController::class, 'rejectedSchools'])->name('systemAdmin.rejected');
