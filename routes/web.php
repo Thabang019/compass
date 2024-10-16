@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/learner/dashboard', [LearnerController::class, 'index'])->name('learner.dashboard');
     Route::post('/learner/book-school', [LearnerController::class, 'bookSchool'])->name('learner.book_school');
 
-   
+    Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::get('/book/{school}', [BookingController::class, 'create'])->name('book.create');
     Route::post('/book', [BookingController::class, 'store'])->name('book.store');
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');

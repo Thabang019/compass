@@ -27,6 +27,13 @@ class BookingController extends Controller
     {
         return view('book.create', compact('school'));
     }
+    
+    public function storeBookings(Request $request)
+{
+    $bookings = $request->input('bookings');
+    $request->session()->put('bookings', $bookings); // Store the bookings in session
+    return response()->json(['message' => 'Bookings stored successfully']);
+}
 
     public function store(Request $request)
     {
