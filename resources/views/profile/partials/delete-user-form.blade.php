@@ -30,8 +30,9 @@
                 }}
             </p>
             @if(Auth::user()->role === 'root')
-            <x-text-input id="user_id" name="user_id" type="hidden" class="mt-1 block w-full" :value="$userID"/>
-            @endif
+    <x-text-input id="user_id" name="user_id" type="hidden" class="mt-1 block w-full" :value="$userID"/>
+@endif
+
 
             @if(Auth::user()->role !== 'root')
                 <div class="mt-6">

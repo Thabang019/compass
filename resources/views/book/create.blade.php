@@ -128,7 +128,7 @@
                     body: JSON.stringify({ bookings: bookings })
                 }).then(response => {
                     if (response.ok) {
-                        window.location.href = "/bookings/confirm"; // Redirect to confirmation page
+                        window.location.href = "/book/confirm"; // Redirect to confirmation page
                     } else {
                         alert('Failed to confirm bookings.');
                     }
