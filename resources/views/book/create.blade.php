@@ -61,16 +61,16 @@
         </div>
     </div>
 
-    <script>
+   <script>
 
-        let bookings = [];
-        const vehicles = @json($school->vehicles);
-        const instructors = @json($school->instructors);
-        const school = @json($school);
-        const loggedInUserId = @json(auth()->id());
-        const today = new Date().toISOString().split('T')[0];
+    let bookings = [];
+    const vehicles = @json($school->vehicles);
+    const instructors = @json($school->instructors);
+    const school = @json($school);
+    const loggedInUserId = @json(auth()->id());
+    const today = new Date().toISOString().split('T')[0];
 
-        document.getElementById('add-booking').addEventListener('click', function() {
+    document.getElementById('add-booking').addEventListener('click', function() {
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
         const duration = document.getElementById('duration').value;
@@ -83,7 +83,6 @@
             alert('You cannot book a lesson before today\'s date.');
             return;
         }
-
 
         if (date && time && duration && lessonType && vehicle && instructor) {
             const endTime = calculateEndTime(time, duration);
@@ -98,30 +97,30 @@
 
             if (conflictingBooking) {
                 alert('This instructor is already booked for the selected time. Please choose a different time or date.');
-                return; // Prevent adding the booking if there's a conflict
+                return;
             }
 
             // Calculate the price based on lesson type
             let pricePerLesson;
             switch (lessonType) {
                 case '10': // Code 10
-                    pricePerLesson = school.price_per_lesson * 0.35;
+                    pricePerLesson = parseFloat(school.price_per_lesson) * 0.35;
                     break;
                 case '8': // Code 8
-                    pricePerLesson = school.price_per_lesson * 0.25;
+                    pricePerLesson = parseFloat(school.price_per_lesson) * 0.25;
                     break;
                 case '14': // Code 14
-                    pricePerLesson = school.price_per_lesson * 0.45;
+                    pricePerLesson = parseFloat(school.price_per_lesson) * 0.45;
                     break;
                 default:
                     alert('Invalid lesson type.');
                     return;
             }
 
-            const schoolPricePerLesson = Number(school.price_per_lesson); // Convert to number
+            const schoolPricePerLesson = parseFloat(school.price_per_lesson); // Ensure number type
             const totalPrice = (pricePerLesson + schoolPricePerLesson) * duration;
 
-           console.log('total:', totalPrice);
+            console.log('total:', totalPrice);
             // If no conflicts, add the booking
             const booking = {
                 d_school,
@@ -151,9 +150,9 @@
 
     // Display Total Price
     function displayTotalPrice() {
-        const totalPriceElement = document.getElementById('total-price'); // Assume there's an element to display total price
+        const totalPriceElement = document.getElementById('total-price'); // Ensure this element exists
         const totalPrice = calculateTotalBookingsPrice();
-        totalPriceElement.textContent = `Total Price: R ${totalPrice.toFixed(2)}`; // Display total price
+        totalPriceElement.textContent = `Total Price: R ${totalPrice.toFixed(2)}`;
     }
 
     // Update the Booking List
@@ -170,13 +169,47 @@
                     <p>Lesson Type: Code ${booking.lessonType}</p>
                     <p>Vehicle: ${booking.vehicle.registration_number}</p>
                     <p>Instructor: ${booking.instructor.name}</p>
-                    <p>Total Price: R ${booking.totalPrice}</p>
+                    <p>Total Price: R ${booking.totalPrice.toFixed(2)}</p>
                     <button onclick="removeBooking(${index})" class="text-red-500 hover:text-red-700">Remove</button>
                 </li>
             `;
             bookingList.insertAdjacentHTML('beforeend', bookingItem);
         });
     }
+
+    // Remove a Booking from the List
+    function removeBooking(index) {
+        bookings.splice(index, 1); // Remove the booking at the given index
+        updateBookingList(); // Update the display
+        displayTotalPrice(); // Recalculate total price after removal
+    }
+
+    // Confirm and Pay Action
+    document.getElementById('confirm-bookings').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        if (bookings.length > 0) {
+            // Send bookings to the server via POST and redirect to confirmation page
+            fetch('/store-bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({ bookings: bookings })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "/book/confirm"; // Redirect to confirmation page
+                } else {
+                    alert('Failed to confirm bookings.');
+                }
+            }).catch(err => {
+                alert('Error: ' + err.message);
+            });
+        } else {
+            alert('No bookings to confirm.');
+        }
+    });
 
     // Calculate the End Time
     function calculateEndTime(startTime, duration) {
@@ -186,5 +219,5 @@
         return endTime;
     }
 
-        </script>
+</script>
 </x-app-layout>

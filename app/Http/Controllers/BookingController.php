@@ -28,6 +28,45 @@ class BookingController extends Controller
         $school = $school->load(['instructors', 'vehicles']);
         return view('book.create', compact('school'));
     }
+    public function finalizePayment(Request $request)
+{
+    // Validate the payment amount (user should input the correct total)
+    $request->validate([
+        'amount_paid' => 'required|numeric|min:' . $request->input('totalCost'),
+    ]);
+
+    // Optionally, mark the bookings as 'paid' or 'completed' in the database
+    Booking::where('user_id', Auth::id())->update(['status' => 'completed']);
+
+    // Clear session bookings after payment
+    $request->session()->forget('bookings');
+
+    return redirect()->route('dashboard')->with('success', 'Payment successful, and booking is completed!');
+}
+
+
+   public function showConfirmationPage()
+{
+    $user = Auth::user();
+    $bookings = Booking::where('user_id', $user->id)->get();
+
+    // Default lesson price
+    $lessonPrice = 200;
+
+    // Calculate the total cost by summing up hours * lesson price for all bookings
+    $totalCost = $bookings->sum(function($booking) use ($lessonPrice) {
+        return $booking->hours * $lessonPrice;
+    });
+
+    return view('book.confirm', [
+        'user' => $user,  // Check if the phone number is available on this object
+        'bookings' => $bookings,
+        'lessonPrice' => $lessonPrice,
+        'totalCost' => $totalCost
+    ]);
+}
+
+
     
     public function storeBookings(Request $request)
 {
@@ -36,6 +75,7 @@ class BookingController extends Controller
     return response()->json(['message' => 'Bookings stored successfully']);
 }
 
+
     public function store(Request $request)
     {
         $request->validate([
@@ -43,6 +83,7 @@ class BookingController extends Controller
             'instructor_id' => 'required|exists:instructors,id',
             'start' => 'required|date',
             'end' => 'required|date',
+            
         ]);
 
         $lesson = Lesson::create([
