@@ -51,6 +51,7 @@
                 <!-- Bookings will be appended here -->
             </ul>
 
+            <div id="total-price" class="mt-4 font-bold">Total Price: R 0.00</div>
             <!-- Confirm and Pay Button -->
             <div class="mt-6">
                 <button type="submit" id="confirm-bookings" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
@@ -61,89 +62,129 @@
     </div>
 
     <script>
+
         let bookings = [];
+        const vehicles = @json($school->vehicles);
+        const instructors = @json($school->instructors);
+        const school = @json($school);
+        const loggedInUserId = @json(auth()->id());
+        const today = new Date().toISOString().split('T')[0];
 
-        // Add Booking to the List
         document.getElementById('add-booking').addEventListener('click', function() {
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-            const duration = document.getElementById('duration').value;
-            const lessonType = document.getElementById('lesson_type').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const duration = document.getElementById('duration').value;
+        const lessonType = document.getElementById('lesson_type').value;
+        const vehicle = vehicles.find(v => v.code === lessonType);
+        const instructor = instructors.find(i => i.status === 'available');
+        const d_school = school.registration_number;
 
-            if (date && time && duration && lessonType) {
-                const endTime = calculateEndTime(time, duration);
-                const booking = {
-                    date,
-                    time,
-                    endTime,
-                    duration,
-                    lessonType
-                };
+        if (new Date(date) < new Date(today)) {
+            alert('You cannot book a lesson before today\'s date.');
+            return;
+        }
 
-                bookings.push(booking);
-                updateBookingList();
-                document.getElementById('booking-form').reset(); // Clear the form fields
-            } else {
-                alert('Please fill in all fields.');
-            }
-        });
 
-        // Update the Booking List
-        function updateBookingList() {
-            const bookingList = document.getElementById('booking-list');
-            bookingList.innerHTML = ''; // Clear the current list
-
-            bookings.forEach((booking, index) => {
-                const bookingItem = `
-                    <li class="p-4 bg-gray-100 rounded shadow">
-                        <p>Date: ${booking.date}</p>
-                        <p>Time: ${booking.time} - ${booking.endTime}</p>
-                        <p>Duration: ${booking.duration} hour(s)</p>
-                        <p>Lesson Type: Code ${booking.lessonType}</p>
-                        <button onclick="removeBooking(${index})" class="text-red-500 hover:text-red-700">Remove</button>
-                    </li>
-                `;
-                bookingList.insertAdjacentHTML('beforeend', bookingItem);
+        if (date && time && duration && lessonType && vehicle && instructor) {
+            const endTime = calculateEndTime(time, duration);
+            
+            // Check for time conflicts for the same instructor
+            const conflictingBooking = bookings.find(booking => {
+                return booking.instructor.id === instructor.id && booking.date === date && (
+                    (time >= booking.time && time < booking.endTime) || 
+                    (endTime > booking.time && endTime <= booking.endTime)
+                );
             });
-        }
 
-        // Remove a Booking from the List
-        function removeBooking(index) {
-            bookings.splice(index, 1); // Remove the booking at the given index
-            updateBookingList(); // Update the display
-        }
-
-        // Confirm and Pay Action
-        document.getElementById('confirm-bookings').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            if (bookings.length > 0) {
-                // Send bookings to the server via POST and redirect to confirmation page
-                fetch('/store-bookings', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                    },
-                    body: JSON.stringify({ bookings: bookings })
-                }).then(response => {
-                    if (response.ok) {
-                        window.location.href = "/bookings/confirm"; // Redirect to confirmation page
-                    } else {
-                        alert('Failed to confirm bookings.');
-                    }
-                });
-            } else {
-                alert('No bookings to confirm.');
+            if (conflictingBooking) {
+                alert('This instructor is already booked for the selected time. Please choose a different time or date.');
+                return; // Prevent adding the booking if there's a conflict
             }
-        });
 
-        // Calculate the End Time
-        function calculateEndTime(startTime, duration) {
-            const [hours, minutes] = startTime.split(':').map(Number);
-            const endHours = (hours + parseInt(duration)) % 24;
-            const endTime = `${String(endHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-            return endTime;
+            // Calculate the price based on lesson type
+            let pricePerLesson;
+            switch (lessonType) {
+                case '10': // Code 10
+                    pricePerLesson = school.price_per_lesson * 0.35;
+                    break;
+                case '8': // Code 8
+                    pricePerLesson = school.price_per_lesson * 0.25;
+                    break;
+                case '14': // Code 14
+                    pricePerLesson = school.price_per_lesson * 0.45;
+                    break;
+                default:
+                    alert('Invalid lesson type.');
+                    return;
+            }
+
+            const schoolPricePerLesson = Number(school.price_per_lesson); // Convert to number
+            const totalPrice = (pricePerLesson + schoolPricePerLesson) * duration;
+
+           console.log('total:', totalPrice);
+            // If no conflicts, add the booking
+            const booking = {
+                d_school,
+                date,
+                time,
+                endTime,
+                duration,
+                lessonType,
+                vehicle,
+                instructor,
+                totalPrice,
+                userId: loggedInUserId
+            };
+
+            bookings.push(booking);
+            updateBookingList();
+            displayTotalPrice();
+            document.getElementById('booking-form').reset(); // Clear the form fields
+        } else {
+            alert('Please fill in all fields.');
         }
-    </script>
+    });
+
+    function calculateTotalBookingsPrice() {
+        return bookings.reduce((total, booking) => total + booking.totalPrice, 0);
+    }
+
+    // Display Total Price
+    function displayTotalPrice() {
+        const totalPriceElement = document.getElementById('total-price'); // Assume there's an element to display total price
+        const totalPrice = calculateTotalBookingsPrice();
+        totalPriceElement.textContent = `Total Price: R ${totalPrice.toFixed(2)}`; // Display total price
+    }
+
+    // Update the Booking List
+    function updateBookingList() {
+        const bookingList = document.getElementById('booking-list');
+        bookingList.innerHTML = ''; // Clear the current list
+
+        bookings.forEach((booking, index) => {
+            const bookingItem = `
+                <li class="p-4 bg-gray-100 rounded shadow">
+                    <p>Date: ${booking.date}</p>
+                    <p>Time: ${booking.time} - ${booking.endTime}</p>
+                    <p>Duration: ${booking.duration} hour(s)</p>
+                    <p>Lesson Type: Code ${booking.lessonType}</p>
+                    <p>Vehicle: ${booking.vehicle.registration_number}</p>
+                    <p>Instructor: ${booking.instructor.name}</p>
+                    <p>Total Price: R ${booking.totalPrice}</p>
+                    <button onclick="removeBooking(${index})" class="text-red-500 hover:text-red-700">Remove</button>
+                </li>
+            `;
+            bookingList.insertAdjacentHTML('beforeend', bookingItem);
+        });
+    }
+
+    // Calculate the End Time
+    function calculateEndTime(startTime, duration) {
+        const [hours, minutes] = startTime.split(':').map(Number);
+        const endHours = (hours + parseInt(duration)) % 24;
+        const endTime = `${String(endHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+        return endTime;
+    }
+
+        </script>
 </x-app-layout>
