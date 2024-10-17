@@ -6,7 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DrivingSchoolController;
 use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\WorkingHoursController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StripeController;
 
 
 Route::get('/', function () {
@@ -80,7 +80,7 @@ Route::post('working-hours/store', [WorkingHoursController::class, 'store'])->na
 Route::get('working-hours/schedule', [WorkingHoursController::class, 'schedule'])->name('working_hours.schedule');
 Route::put('/working_hours/{id}', [WorkingHoursController::class, 'update'])->name('working_hours.update');
 
-Route::post('/session',  [StripeController::class, 'session'])->name('session');
+Route::post('/session', [StripeController::class, 'session'])->name('session');
 
 Route::post('/drivingSchool/store-instructor', [DrivingSchoolController::class, 'store_instructor'])
     ->name('instructors.store')

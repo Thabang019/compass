@@ -25,6 +25,7 @@ class BookingController extends Controller
 
     public function create(DrivingSchool $school)
     {
+        $school = $school->load(['instructors', 'vehicles']);
         return view('book.create', compact('school'));
     }
     public function finalizePayment(Request $request)

@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="container mx-auto px-4 py-8">
         <div class="flex flex-wrap -mx-4">
-            <div class="w-full lg:w-1/2 px-4 mb-4 lg:mb-0">
+            <div class="w-100 lg:w-1/2 px-4 mb-4 lg:mb-0">
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     @if ($drivingSchool->image)
                         <img src="{{ asset($drivingSchool->image) }}" alt="{{ $drivingSchool->school_name }} Image" class="w-full h-auto rounded-lg mb-4 shadow-md">
@@ -30,7 +30,7 @@
                 </div>
             </div>
             
-            <div class="w-full lg:w-1/2 px-4">
+            <div class="w-100 lg:w-1/2 px-4">
                 <div class="bg-white  h-full p-6 rounded-lg shadow-md">
                     <iframe src="{{ asset($drivingSchool->certificate) }}" class="w-full h-full rounded-lg shadow-md"></iframe>
                 </div>
