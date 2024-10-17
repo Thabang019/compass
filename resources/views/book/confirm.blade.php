@@ -7,7 +7,7 @@
             <h2 class="text-xl font-semibold mb-4">Personal Details</h2>
             <p><strong>Name:</strong> {{ $user->name }}</p>
             <p><strong>Email:</strong> {{ $user->email }}</p>
-            <p><strong>Phone Number:</strong> {{ $user->phone_number ?? 'N/A' }}</p> <!-- Updated to phone_number -->
+            <p><strong>Phone Number:</strong> {{ $user->phone_number ?? 'N/A' }}</p> 
             
             <!-- Booking Details Section -->
             <h2 class="text-xl font-semibold mt-6 mb-4">Booking Details</h2>
