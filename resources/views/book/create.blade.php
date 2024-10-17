@@ -77,8 +77,7 @@
         const lessonType = document.getElementById('lesson_type').value;
         const vehicle = vehicles.find(v => v.code === lessonType);
         const instructor = instructors.find(i => i.status === 'available');
-        const d_school = school.registration_number;
-
+        
         if (new Date(date) < new Date(today)) {
             alert('You cannot book a lesson before today\'s date.');
             return;
@@ -123,7 +122,7 @@
             console.log('total:', totalPrice);
             // If no conflicts, add the booking
             const booking = {
-                d_school,
+                school,
                 date,
                 time,
                 endTime,
@@ -188,28 +187,22 @@
     document.getElementById('confirm-bookings').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent default form submission
 
+        // Check if bookings have been added
+        console.log('Bookings before confirmation:', bookings); // Log for debugging
+
         if (bookings.length > 0) {
-            // Send bookings to the server via POST and redirect to confirmation page
-            fetch('/store-bookings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                },
-                body: JSON.stringify({ bookings: bookings })
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = "/book/confirm"; // Redirect to confirmation page
-                } else {
-                    alert('Failed to confirm bookings.');
-                }
-            }).catch(err => {
-                alert('Error: ' + err.message);
-            });
+            // Save bookings to local storage before navigating to checkout page
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            console.log('Bookings saved to localStorage:', localStorage.getItem('bookings')); // Log for debugging
+
+            // Redirect to the checkout page
+            window.location.href = "/book/confirm";
         } else {
             alert('No bookings to confirm.');
         }
     });
+
+
 
     // Calculate the End Time
     function calculateEndTime(startTime, duration) {
