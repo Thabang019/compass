@@ -80,7 +80,12 @@ Route::post('working-hours/store', [WorkingHoursController::class, 'store'])->na
 Route::get('working-hours/schedule', [WorkingHoursController::class, 'schedule'])->name('working_hours.schedule');
 Route::put('/working_hours/{id}', [WorkingHoursController::class, 'update'])->name('working_hours.update');
 
-Route::post('/session', [StripeController::class, 'session'])->name('session');
+    Route::post('/session', [StripeController::class, 'session'])->name('session');
+    Route::get('/success', [StripeController::class, 'paymentSuccess'])->name('success');
+    Route::get('/cancel', function () {
+        return redirect()->route('book.confirm')->with('status', 'Payment was canceled.');
+    })->name('cancel');
+
 
 Route::post('/drivingSchool/store-instructor', [DrivingSchoolController::class, 'store_instructor'])
     ->name('instructors.store')

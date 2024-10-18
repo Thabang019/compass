@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
-            $table->foreignId('instructor_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->time('time');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Reference to the user who made the booking
+            $table->string('driving_school_name');
+            $table->decimal('total_price', 8, 2);
             $table->timestamps();
         });
     }

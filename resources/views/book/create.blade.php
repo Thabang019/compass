@@ -63,7 +63,7 @@
 
    <script>
 
-    let bookings = [];
+    let lessons = [];
     const vehicles = @json($school->vehicles);
     const instructors = @json($school->instructors);
     const school = @json($school);
@@ -87,10 +87,10 @@
             const endTime = calculateEndTime(time, duration);
             
             // Check for time conflicts for the same instructor
-            const conflictingBooking = bookings.find(booking => {
-                return booking.instructor.id === instructor.id && booking.date === date && (
-                    (time >= booking.time && time < booking.endTime) || 
-                    (endTime > booking.time && endTime <= booking.endTime)
+            const conflictingBooking = lessons.find(lesson => {
+                return lesson.instructor.id === instructor.id && lesson.date === date && (
+                    (time >= lesson.time && time < lesson.endTime) || 
+                    (endTime > lesson.time && endTime <= lesson.endTime)
                 );
             });
 
@@ -121,7 +121,7 @@
 
             console.log('total:', totalPrice);
             // If no conflicts, add the booking
-            const booking = {
+            const lesson = {
                 school,
                 date,
                 time,
@@ -134,7 +134,7 @@
                 userId: loggedInUserId
             };
 
-            bookings.push(booking);
+            lessons.push(lesson);
             updateBookingList();
             displayTotalPrice();
             document.getElementById('booking-form').reset(); // Clear the form fields
@@ -144,7 +144,7 @@
     });
 
     function calculateTotalBookingsPrice() {
-        return bookings.reduce((total, booking) => total + booking.totalPrice, 0);
+        return lessons.reduce((total, lesson) => total + lesson.totalPrice, 0);
     }
 
     // Display Total Price
@@ -159,16 +159,16 @@
         const bookingList = document.getElementById('booking-list');
         bookingList.innerHTML = ''; // Clear the current list
 
-        bookings.forEach((booking, index) => {
+        lessons.forEach((lesson, index) => {
             const bookingItem = `
                 <li class="p-4 bg-gray-100 rounded shadow">
-                    <p>Date: ${booking.date}</p>
-                    <p>Time: ${booking.time} - ${booking.endTime}</p>
-                    <p>Duration: ${booking.duration} hour(s)</p>
-                    <p>Lesson Type: Code ${booking.lessonType}</p>
-                    <p>Vehicle: ${booking.vehicle.registration_number}</p>
-                    <p>Instructor: ${booking.instructor.name}</p>
-                    <p>Total Price: R ${booking.totalPrice.toFixed(2)}</p>
+                    <p>Date: ${lesson.date}</p>
+                    <p>Time: ${lesson.time} - ${lesson.endTime}</p>
+                    <p>Duration: ${lesson.duration} hour(s)</p>
+                    <p>Lesson Type: Code ${lesson.lessonType}</p>
+                    <p>Vehicle: ${lesson.vehicle.registration_number}</p>
+                    <p>Instructor: ${lesson.instructor.name}</p>
+                    <p>Total Price: R ${lesson.totalPrice.toFixed(2)}</p>
                     <button onclick="removeBooking(${index})" class="text-red-500 hover:text-red-700">Remove</button>
                 </li>
             `;
@@ -178,7 +178,7 @@
 
     // Remove a Booking from the List
     function removeBooking(index) {
-        bookings.splice(index, 1); // Remove the booking at the given index
+        lessons.splice(index, 1); // Remove the booking at the given index
         updateBookingList(); // Update the display
         displayTotalPrice(); // Recalculate total price after removal
     }
@@ -188,12 +188,12 @@
         event.preventDefault(); // Prevent default form submission
 
         // Check if bookings have been added
-        console.log('Bookings before confirmation:', bookings); // Log for debugging
+        console.log('Bookings before confirmation:', lessons); // Log for debugging
 
-        if (bookings.length > 0) {
+        if (lessons.length > 0) {
             // Save bookings to local storage before navigating to checkout page
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-            console.log('Bookings saved to localStorage:', localStorage.getItem('bookings')); // Log for debugging
+            localStorage.setItem('lessons', JSON.stringify(lessons));
+            console.log('Bookings saved to localStorage:', localStorage.getItem('lessons')); // Log for debugging
 
             // Redirect to the checkout page
             window.location.href = "/book/confirm";
