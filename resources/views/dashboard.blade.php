@@ -55,5 +55,3 @@
         }
     </script>
 </x-app-layout>
-
-

@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Stripe\Stripe;
+use Stripe\Checkout\Session as StripeSession;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Lesson;
@@ -101,5 +103,60 @@ class BookingController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Booking created successfully!');
+    }
+
+      public function createPaymentSession(Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $bookings = session('bookings'); // Assuming you store bookings in the session
+        $totalAmount = array_reduce($bookings, function ($sum, $booking) {
+            return $sum + $booking['totalPrice'] * 100; // Convert to cents for Stripe
+        }, 0);
+
+        // Create Stripe Checkout Session
+        $session = StripeSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd', // Or your local currency
+                    'product_data' => [
+                        'name' => 'Driving Lesson Booking',
+                    ],
+                    'unit_amount' => $totalAmount,
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('payment.success'),
+            'cancel_url' => route('payment.cancel'),
+        ]);
+
+        // Redirect to Stripe's Checkout
+        return redirect($session->url);
+    }
+
+    public function paymentSuccess()
+    {
+        // Get authenticated user
+        $user = auth()->user();
+
+        // Retrieve the bookings from the session
+        $bookings = session('bookings');
+
+        // Mark the bookings as paid in the database
+        foreach ($bookings as $booking) {
+            DB::table('bookings')->where('id', $booking['id'])->update(['status' => 'paid']);
+        }
+
+        // Clear session bookings
+        session()->forget('bookings');
+
+        return redirect()->route('dashboard')->with('status', 'Payment successful! Your booking has been confirmed.');
+    }
+
+    public function paymentCancel()
+    {
+        return redirect()->route('checkout')->with('error', 'Payment was cancelled. Please try again.');
     }
 }

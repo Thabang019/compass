@@ -13,23 +13,31 @@ use Illuminate\Support\Facades\Validator;
 class DrivingSchoolController extends Controller
 {
     // Display the list of driving schools with optional location filtering
-    public function index(Request $request): View
-    {
-        $user = auth()->user();
+   public function index(Request $request): View
+{
+    $user = auth()->user();
 
-        // Check if the user is an admin
-        if ($user->role === 'admin') {
-            // Get the driving school associated with the admin
-            $drivingSchool = $user->drivingSchool;
-            $drivingSchool = $drivingSchool ? $drivingSchool->load(['instructors', 'vehicles']) : null;
-            $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
-    
-            // Return the driving school dashboard view for the admin
-            return view('drivingSchool.dashboard', [
-                'driving_school' => $drivingSchool,
-                'driving_school_id' => $drivingSchoolId,
-            ]);
+    // Check if the user is an admin
+    if ($user && $user->role === 'admin') {
+        // Get the driving school associated with the admin
+        $drivingSchool = $user->drivingSchool;
+
+        // Load related instructors and vehicles if the driving school exists
+        if ($drivingSchool) {
+            $drivingSchool->load(['instructors', 'vehicles']);
+            $drivingSchoolId = $drivingSchool->id;
+        } else {
+            $drivingSchool = null;
+            $drivingSchoolId = null;
         }
+
+        // Return the driving school dashboard view for the admin
+        return view('drivingSchool.dashboard', [
+            'driving_school' => $drivingSchool,
+            'driving_school_id' => $drivingSchoolId,
+        ]);
+    }
+
     
         // Normal user - Filter by location if provided
         $query = DrivingSchool::query();

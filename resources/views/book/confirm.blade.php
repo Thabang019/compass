@@ -1,18 +1,24 @@
 <x-app-layout>
     <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold mb-6">Confirm and Pay</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center">Confirm and Pay</h1>
         
         <div class="bg-white p-6 rounded-lg shadow-md">
             <!-- Personal Details Section -->
             <h2 class="text-xl font-semibold mb-4">Personal Details</h2>
             <p><strong>Name:</strong> {{ $user->name }}</p>
             <p><strong>Email:</strong> {{ $user->email }}</p>
-            <p><strong>Phone Number:</strong> {{ $user->phone_number ?? 'N/A' }}</p> 
+            <p><strong>Phone Number:</strong> {{ $user->phone_number ?? 'N/A' }}</p> <!-- Updated to phone_number -->
+
+
+            <h2 class="text-xl font-semibold mt-6 mb-4">Driving School Details</h2>
+            <div id="driving-school-details">
+                <!-- Driving School info will be displayed here -->
+            </div>
             
             <!-- Booking Details Section -->
-            <h2 class="text-xl font-semibold mt-6 mb-4">Booking Details</h2>
+            
             <div class="mt-6">
-                <h2 class="text-2xl font-bold mb-4">Your Bookings</h2>
+                <h2 class="text-xl font-semibold mt-6 mb-4">Your Bookings</h2>
                     <ul id="checkout-booking-list" class="space-y-4">
                         <!-- Bookings will be appended here -->
                     </ul>

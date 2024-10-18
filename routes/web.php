@@ -6,7 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DrivingSchoolController;
 use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\WorkingHoursController;
-use App\Http\Controllers\StripeController;
+
 
 
 Route::get('/', function () {
@@ -94,5 +94,6 @@ Route::resource('drivingSchool', DrivingSchoolController::class)
     ->only(['index', 'store', 'edit'])
     ->middleware(['auth', 'verified']);
 
+    
 // Include Authentication Routes
 require __DIR__.'/auth.php';

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +12,7 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'lesson_id', 'instructor_id', 'date', 'time'
+        'user_id', 'lesson_id', 'instructor_id', 'driving_school_id', 'date', 'time'
     ];
 
     public function user()
@@ -27,5 +29,9 @@ class Booking extends Model
     {
         return $this->belongsTo(Instructor::class);
     }
-    
+
+    public function drivingSchool()
+    {
+        return $this->belongsTo(DrivingSchool::class);
+    }
 }
