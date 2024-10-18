@@ -10,22 +10,20 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'lesson_id', 'instructor_id', 'date', 'time'
+        'user_id',
+        'driving_school_name',
+        'total_price',
     ];
 
+    // A booking can have many lessons
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
+    // A booking belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    public function lesson()
-    {
-        return $this->belongsTo(Lesson::class);
-    }
-
-    public function instructor()
-    {
-        return $this->belongsTo(Instructor::class);
-    }
-    
 }

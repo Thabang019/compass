@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lessons', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('description');
-            $table->time('duration');
-            $table->timestamps();
-        });
-    }
+            Schema::create('lessons', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('booking_id');
+                $table->date('date');
+                $table->time('start_time');
+                $table->time('end_time');
+                $table->string('lesson_type');
+                $table->string('vehicle_registration');
+                $table->string('instructor_name');
+                $table->decimal('lesson_price', 8, 2);
+                $table->timestamps();
+            });
+        }
 
     /**
      * Reverse the migrations.

@@ -9,8 +9,19 @@ class Lesson extends Model
 {
     use HasFactory;
 
-    public function bookings()
+    protected $fillable = [
+        'booking_id',
+        'date',
+        'start_time',
+        'end_time',
+        'lesson_type',
+        'vehicle_registration',
+        'instructor_name',
+        'lesson_price',
+    ];
+
+    public function booking()
     {
-    return $this->hasMany(Booking::class);
+        return $this->belongsTo(Booking::class);
     }
 }
