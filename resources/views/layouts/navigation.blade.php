@@ -12,10 +12,10 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        @if(Auth::check())
-                            @if(Auth::user()->role === 'admin')
+                    @if(Auth::check())
+                        @if(Auth::user()->role === 'admin')
                             <x-nav-link :href="route('drivingSchool.index')" :active="request()->routeIs('drivingSchool.index')">
-                            {{ __('Dashboard') }}
+                                {{ __('Dashboard') }}
                             </x-nav-link>
 
                             <x-nav-link :href="route('working_hours.schedule')" :active="request()->routeIs('working_hours.schedule')">
@@ -44,24 +44,24 @@
                                 </x-dropdown>      
                             </div>
 
-                            @elseif(Auth::user()->role === 'user')
-                                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                                    {{ __('Dashboard') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                                    {{ __('My Lessons') }}
-                                </x-nav-link>
-                            @elseif(Auth::user()->role === 'root')
-                                <x-nav-link :href="route('systemAdmin.dashboard')" :active="request()->routeIs('systemAdmin.dashboard')">
-                                    {{ __('Dashboard') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('systemAdmin.rejected')" :active="request()->routeIs('systemAdmin.rejected')">
-                                    {{ __('Rejected Driving schools') }}
-                                </x-nav-link>
-                            @endif
-                        @endif
-                </div>
+                        @elseif(Auth::user()->role === 'user')
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('my.lessons')" :active="request()->routeIs('my.lessons')">
+                                {{ __('My Lessons') }}
+                            </x-nav-link>
 
+                        @elseif(Auth::user()->role === 'root')
+                            <x-nav-link :href="route('systemAdmin.dashboard')" :active="request()->routeIs('systemAdmin.dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('systemAdmin.rejected')" :active="request()->routeIs('systemAdmin.rejected')">
+                                {{ __('Rejected Driving schools') }}
+                            </x-nav-link>
+                        @endif
+                    @endif
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -109,6 +109,8 @@
             </div>
         </div>
     </div>
+</nav>
+
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">

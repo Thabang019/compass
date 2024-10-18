@@ -6,7 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DrivingSchoolController;
 use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\WorkingHoursController;
-
+use App\Http\Controllers\StripeController;
+use App\Http\Controllers\LessonController;
 
 
 Route::get('/', function () {
@@ -99,6 +100,8 @@ Route::resource('drivingSchool', DrivingSchoolController::class)
     ->only(['index', 'store', 'edit'])
     ->middleware(['auth', 'verified']);
 
-    
+    Route::get('/my-lessons', [LessonController::class, 'showMyLessons'])->name('my.lessons');
+
+
 // Include Authentication Routes
 require __DIR__.'/auth.php';
