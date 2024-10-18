@@ -45,11 +45,39 @@
 
       <!-- Tab Content -->
     <div>
-        <div x-show="activeTab === 'bookings'" class="bg-white p-8 rounded shadow w-full">
-            <h2 class="text-xl font-semibold mb-2">Bookings</h2>
-            <p>Zero Bookings</p>
-            <!-- Add more student related details here -->
+        <div x-show="activeTab === 'bookings'" class="bg-white p-8 rounded-lg shadow-md w-full">
+            <h2 class="text-2xl font-bold mb-6 border-b-2 pb-4 text-gray-700">Upcoming Bookings</h2>
+            
+            @if($futureLessons && count($futureLessons) > 0)
+                @foreach($futureLessons as $futureLesson)
+                    <div class="mb-8 p-6 bg-blue-50 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-600">Booking ID: {{ $futureLesson['booking']->id }}</h3>
+                        <p class="mt-2 text-gray-600">
+                            <span class="font-medium text-gray-700">Learner Driver:</span> {{ $futureLesson['user']->name }}<br>
+                            <span class="font-medium text-gray-700">Email:</span> {{ $futureLesson['user']->email }}<br>
+                            <span class="font-medium text-gray-700">Phone:</span> {{ $futureLesson['user']->phone_number }}
+                        </p>
+                        
+                        <ul class="mt-4 space-y-4">
+                            @foreach($futureLesson['lessons'] as $lesson)
+                                <li class="bg-white p-4 rounded-md shadow">
+                                    <p class="text-gray-600">
+                                        <span class="font-medium text-gray-700">Date:</span> {{ $lesson->date }}<br>
+                                        <span class="font-medium text-gray-700">Time:</span> {{ $lesson->start_time }} - {{ $lesson->end_time }}<br>
+                                        <span class="font-medium text-gray-700">Lesson Type:</span> Code {{ $lesson->lesson_type }}<br>
+                                        <span class="font-medium text-gray-700">Instructor:</span> {{ $lesson->instructor_name }}<br>
+                                        <span class="font-medium text-gray-700">Vehicle:</span> {{ $lesson->vehicle_registration }}
+                                    </p>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-gray-500 mt-4">No future lessons available.</p>
+            @endif
         </div>
+
 
         <div x-show="activeTab === 'vehicles'" class="bg-white p-8 rounded shadow w-full">
             <ul class="space-y-4">
@@ -86,7 +114,7 @@
         
          <!-- Edit Vehicle Modal -->
         @if(isset($vehicle))
-        <<div x-data="{ show: false }" @open-vehicle-modal.window="show = ($event.detail == {{ $vehicle->id }})" x-show="show" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div x-data="{ show: false }" @open-vehicle-modal.window="show = ($event.detail == {{ $vehicle->id }})" x-show="show" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
                 <h2 class="text-xl font-semibold mb-4">Edit Vehicle</h2>
                 <form method="POST" action="{{ route('drivingSchool.update', $vehicle) }}">
