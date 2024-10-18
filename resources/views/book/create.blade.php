@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold mb-6">{{ $school->school_name }}</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center">{{ $school->school_name }}</h1>
         <div class="bg-white rounded shadow p-6">
             <form id="booking-form" class="space-y-6">
                 @csrf

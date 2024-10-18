@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Log;
 class DrivingSchoolController extends Controller
 {
     // Display the list of driving schools with optional location filtering
-    public function index(Request $request): View
-    {
-        $user = auth()->user();
-
-        if ($user->role === 'admin') {
+   public function index(Request $request): View
+{
+    $user = auth()->user();
+    // Check if the user is an admin
+    if ($user->role === 'admin') {
             
             $drivingSchool = $user->drivingSchool;
             $drivingSchool = $drivingSchool ? $drivingSchool->load(['instructors', 'vehicles']) : null;
@@ -51,7 +51,6 @@ class DrivingSchoolController extends Controller
                 'futureLessons' => $futureLessons,
             ]);
         }
-    
         // Normal user - Filter by location if provided
         $query = DrivingSchool::query();
     

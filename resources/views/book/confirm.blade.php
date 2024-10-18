@@ -23,9 +23,9 @@
             </div>
             
             <!-- Booking Details Section -->
-            <h2 class="text-xl font-semibold mt-6 mb-4">Booking Details</h2>
+            
             <div class="mt-6">
-                <h2 class="text-2xl font-bold mb-4">Your Bookings</h2>
+                <h2 class="text-xl font-semibold mt-6 mb-4">Your Bookings</h2>
                     <ul id="checkout-booking-list" class="space-y-4">
                         <!-- Bookings will be appended here -->
                     </ul>
