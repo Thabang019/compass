@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\DrivingSchool;
 use App\Models\Instructor;
+use App\Models\Booking;
 use App\Models\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class DrivingSchoolController extends Controller
 {
@@ -17,17 +20,35 @@ class DrivingSchoolController extends Controller
     {
         $user = auth()->user();
 
-        // Check if the user is an admin
         if ($user->role === 'admin') {
-            // Get the driving school associated with the admin
+            
             $drivingSchool = $user->drivingSchool;
             $drivingSchool = $drivingSchool ? $drivingSchool->load(['instructors', 'vehicles']) : null;
             $drivingSchoolId = $drivingSchool ? $drivingSchool->id : null;
-    
+
+            $drivingSchoolName = $drivingSchool->school_name;
+
+            $bookings = Booking::where('driving_school_name', $drivingSchoolName)->get();
+            
+            $futureLessons = [];
+
+            foreach ($bookings as $booking) {
+                $lessons = $booking->lessons()->where('date', '>', Carbon::today())->get();
+                $user = $booking->user;
+                if ($lessons->isNotEmpty()) {
+                    $futureLessons[] = [
+                        'booking' => $booking,
+                        'lessons' => $lessons,
+                        'user' => $user,
+                    ];
+                }
+            }
+
             // Return the driving school dashboard view for the admin
             return view('drivingSchool.dashboard', [
                 'driving_school' => $drivingSchool,
                 'driving_school_id' => $drivingSchoolId,
+                'futureLessons' => $futureLessons,
             ]);
         }
     
@@ -43,29 +64,30 @@ class DrivingSchoolController extends Controller
     
         return view('dashboard', compact('driving_schools'));
     }
-    public function search(Request $request): View
-{
-    $query = DrivingSchool::query();
 
-    if ($request->has('location') && !empty($request->input('location'))) {
-        $query->where('location', 'like', '%' . $request->input('location') . '%');
+    public function search(Request $request): View
+    {
+        $query = DrivingSchool::query();
+
+        if ($request->has('location') && !empty($request->input('location'))) {
+            $query->where('location', 'like', '%' . $request->input('location') . '%');
+        }
+
+        $driving_schools = DrivingSchool::where('status', 'approved')->get();
+
+        return view('dashboard', compact('driving_schools'));
     }
 
-    $driving_schools = DrivingSchool::where('status', 'approved')->get();
+    public function getSuggestions(Request $request)
+    {
+        $query = $request->input('query');
+        $suggestions = DrivingSchool::where('location', 'LIKE', "{$query}%")
+                                    ->select('location')
+                                    ->distinct()
+                                    ->get();
 
-    return view('dashboard', compact('driving_schools'));
-}
-
-public function getSuggestions(Request $request)
-{
-    $query = $request->input('query');
-    $suggestions = DrivingSchool::where('location', 'LIKE', "{$query}%")
-                                ->select('location')
-                                ->distinct()
-                                ->get();
-
-    return response()->json($suggestions);
-}
+        return response()->json($suggestions);
+    }
 
    
     // Show the form for creating a new driving school
